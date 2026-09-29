@@ -27,7 +27,7 @@ function ErrorState({ message }: { message: string }) {
               <span className="italic text-[#ff2c63]">불러올 수 없습니다</span>
             </h2>
             <p className="mt-4 max-w-[560px] text-[15px] leading-[1.7] text-[#3d3a35]">
-              백엔드 API({process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"})에
+              백엔드 API({process.env.API_BASE_URL ?? "http://backend:8000"})에
               연결하지 못했습니다. 잠시 후 다시 시도하거나, 백엔드 서버가
               실행 중인지 확인해주세요.
             </p>

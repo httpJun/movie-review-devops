@@ -13,7 +13,7 @@ import summaryMock from "./mock/dashboard-summary.json";
 import moviesMock from "./mock/dashboard-movies.json";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+  process.env.API_BASE_URL ?? "http://backend:8000";
 
 // 백엔드 대시보드 API가 준비될 때까지 mock 사용.
 // .env에 NEXT_PUBLIC_USE_MOCK_DASHBOARD=false 를 넣으면 실제 API 호출.

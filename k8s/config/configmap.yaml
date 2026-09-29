@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: movie-app-config
+  namespace: movie-app
+data:
+  SCHEDULER_ENABLED: "false"
+  SCHEDULER_TIMEZONE: "Asia/Seoul"
+  COLLECTION_CRON_HOUR: "3"
+  COLLECTION_CRON_MINUTE: "0"
