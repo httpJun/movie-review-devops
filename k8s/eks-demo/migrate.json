@@ -1,0 +1,51 @@
+{
+  "apiVersion": "batch/v1",
+  "kind": "Job",
+  "metadata": {
+    "name": "backend-migrate",
+    "namespace": "movie-app"
+  },
+  "spec": {
+    "backoffLimit": 0,
+    "activeDeadlineSeconds": 900,
+    "template": {
+      "spec": {
+        "restartPolicy": "Never",
+        "containers": [
+          {
+            "name": "migrate",
+            "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-backend@sha256:44ee25c74b6ed05580daa32c56e38f97ee0e8c93f2d4b14a4e0c14b7b72eef21",
+            "imagePullPolicy": "IfNotPresent",
+            "command": [
+              "alembic",
+              "upgrade",
+              "head"
+            ],
+            "envFrom": [
+              {
+                "configMapRef": {
+                  "name": "movie-app-config"
+                }
+              },
+              {
+                "secretRef": {
+                  "name": "movie-app-secret"
+                }
+              }
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "250m",
+                "memory": "256Mi"
+              },
+              "limits": {
+                "cpu": "1000m",
+                "memory": "1Gi"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
