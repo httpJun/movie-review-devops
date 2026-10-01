@@ -16,7 +16,7 @@
 - PostgreSQL은 emptyDir를 사용한다. DB Pod 삭제 시 데이터가 사라진다.
 - Service는 ClusterIP이며 외부 공개 대신 포트포워딩으로 접속한다.
 - Secret 값은 Git에 저장하지 않는다.
-- 데이터 수집·LLM 분석, HPA, 모니터링, 자동 배포는 아직 검증하지 않았다.
+- 데이터 수집·LLM 분석, 장기 모니터링, 자동 배포는 아직 검증하지 않았다.
 - Pod 삭제 후 자동 재생성을 검증했으며 노드 장애 복구나 무중단을 보장하지 않는다.
 
 ## 파일
@@ -70,3 +70,16 @@ kubectl --context movie-review-eks -n movie-app port-forward svc/frontend 3000:3
 EKS·EC2·EBS·퍼블릭 IPv4는 사용 조건에 따라 과금된다.
 맥북이나 포트포워딩을 종료해도 AWS 리소스는 삭제되지 않는다.
 실습 종료 시 삭제 계획을 확인하고 유료 리소스 및 잔존 리소스를 정리한다.
+
+## Metrics Server 및 HPA 검증 — 2026-10-01
+
+- Metrics Server v0.9.0으로 노드·Pod CPU 및 메모리 조회 확인
+- backend HPA: 최소 1개, 최대 2개, CPU request 대비 목표 50%
+- 컨테이너 내부에서 120초간 인위적인 CPU 부하 발생
+- CPU 사용률 상승에 따라 Pod 1 → 2 확장 확인
+- 부하 종료 후 CPU 사용률 하락에 따라 Pod 2 → 1 축소 확인
+- 실제 사용자 트래픽 성능이나 노드 자동 확장은 검증하지 않음
+
+재배포 시 Metrics Server 설치와 앱 준비 완료 후 hpa.yaml을 적용한다.
+HPA 운영 중 resources.json의 backend replicas 값을 다시 적용하면
+HPA가 관리하는 replica 수에 간섭할 수 있으므로 주의한다.
