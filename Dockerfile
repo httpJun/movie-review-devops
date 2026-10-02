@@ -13,9 +13,9 @@ RUN pip install --no-cache-dir uv
 
 COPY pyproject.toml uv.lock ./
 
-RUN uv sync --frozen --no-dev
+RUN uv sync --frozen --no-dev --no-cache
 
-RUN uv run playwright install --with-deps chromium
+RUN /app/.venv/bin/playwright install --with-deps chromium  && rm -rf /var/lib/apt/lists/*
 
 COPY app ./app
 COPY alembic ./alembic
