@@ -83,3 +83,61 @@ EKS·EC2·EBS·퍼블릭 IPv4는 사용 조건에 따라 과금된다.
 재배포 시 Metrics Server 설치와 앱 준비 완료 후 hpa.yaml을 적용한다.
 HPA 운영 중 resources.json의 backend replicas 값을 다시 적용하면
 HPA가 관리하는 replica 수에 간섭할 수 있으므로 주의한다.
+
+## ALB 및 GitOps 검증 — 2026-10-02~03
+
+- AWS Load Balancer Controller와 EKS Pod Identity를 구성했다.
+- ALB 주소로 프론트엔드 접속 및 /backend-api/movies 응답을 확인했다.
+- Next.js rewrite로 브라우저 API 요청을 내부 backend Service로 전달했다.
+- ALB 접속 검증과 캡처 후 Ingress를 삭제하고 ALB 삭제를 확인했다.
+- Argo CD에서 공개 Git 저장소의 k8s/gitops/movie-app 경로를 연결했다.
+- Git의 frontend replicas 변경으로 1 → 2 → 1 자동 반영을 확인했다.
+- GitHub Actions가 backend·frontend 이미지를 ECR에 업로드하고,
+  GitOps Deployment의 이미지 digest를 갱신하는 커밋을 생성하도록 구성했다.
+- Argo CD가 해당 커밋을 감지해 EKS에 자동 배포하는 흐름을 검증했다.
+
+### 디스크 부족 장애와 복구
+
+증상:
+- 새 backend 이미지 압축 해제 중 no space left on device 발생.
+- ephemeral-storage 부족으로 새 Pod가 Evicted되고 배포가 지연됐다.
+- 기존 backend Pod는 Running 상태를 유지했다.
+
+원인 및 조치:
+- 20GiB 노드에서 기존 이미지와 새 이미지의 다운로드·압축 해제 공간이 부족했다.
+- Linux 의존성에 NVIDIA CUDA와 Triton 등 GPU 관련 패키지가 포함되어 있었다.
+- GitOps의 backend digest를 기존 정상 이미지로 되돌려 복구했다.
+- Argo CD Synced/Healthy 및 노드 DiskPressure=False를 확인했다.
+- Linux용 PyTorch를 CPU 전용으로 변경하고 uv 설치 캐시를 이미지에 남기지 않도록 수정했다.
+
+검증 결과:
+- 로컬 CPU 이미지 크기: docker image inspect 기준 약 0.97GiB.
+- 로컬에서 GPU 관련 패키지 부재 및 sentence-transformers import 성공 확인.
+- 소스 커밋: e05756c.
+- 자동 이미지 갱신 커밋: 3a85373.
+- 해당 배포 커밋으로 Argo CD Synced/Healthy 확인.
+- EKS backend에서 torch 2.14.1+cpu, CUDA build None 확인.
+- backend rollout 성공 및 노드 DiskPressure=False 확인.
+- ECR의 압축 크기와 로컬 이미지 크기는 측정 기준이 달라 직접 감소율을 계산하지 않았다.
+
+### 재배포와 구성 관리
+
+- k8s/gitops/movie-app은 Argo CD가 지속적으로 관리하는 앱 구성이다.
+- k8s/eks-demo/resources.json과 migrate.json은 초기 구성용 스냅샷이다.
+- 이번 스냅샷의 앱·마이그레이션 이미지는 검증된 GitOps digest로 갱신했다.
+- 향후 CI가 GitOps 이미지를 갱신해도 eks-demo 스냅샷은 자동 갱신되지 않는다.
+- 새 클러스터에서는 namespace, Secret, ConfigMap, Service, PostgreSQL,
+  마이그레이션을 먼저 준비한 뒤 앱을 배포한다.
+- Argo CD 관리 시작 후 앱 변경은 GitOps 경로에서 수행한다.
+- resources.json 전체를 반복 적용하면 GitOps 설정과 충돌할 수 있다.
+- Secret, PostgreSQL, 마이그레이션 Job, ALB Ingress는 현재 Application의 관리 대상이 아니다.
+- PostgreSQL은 emptyDir이므로 Pod 또는 클러스터 삭제 시 데이터가 사라진다.
+- DB가 초기화되면 마이그레이션을 다시 실행해야 한다.
+- Completed 마이그레이션 Job은 이미지 파일을 변경해도 자동 재실행되지 않는다.
+  기존 Job이 남아 있다면 삭제 후 새로 생성해야 한다.
+
+### 검증 범위 보충
+
+앞선 2026-10-01 기록 이후 ALB 접속과 GitOps 자동 배포를 추가 검증했다.
+영화 수집·LLM 분석 전체 흐름, 데이터 영속성, 장기 모니터링,
+노드 장애 복구 및 무중단 서비스는 아직 검증하지 않았다.
