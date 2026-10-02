@@ -9,7 +9,7 @@ import {
 const BASE_URL =
   typeof window === "undefined"
     ? process.env.API_BASE_URL ?? "http://backend:8000"
-    : process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+    : "/backend-api";
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${url}`, {
