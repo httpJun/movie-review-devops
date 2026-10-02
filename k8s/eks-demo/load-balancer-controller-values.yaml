@@ -1,0 +1,11 @@
+clusterName: movie-review-eks
+region: ap-northeast-2
+vpcId: vpc-027a601fd19807451
+
+replicaCount: 1
+
+serviceAccount:
+  create: true
+  name: aws-load-balancer-controller
+
+enableServiceMutatorWebhook: false

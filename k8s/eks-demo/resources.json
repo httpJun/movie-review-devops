@@ -45,7 +45,7 @@
                     }
                   }
                 ],
-                "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-backend@sha256:44ee25c74b6ed05580daa32c56e38f97ee0e8c93f2d4b14a4e0c14b7b72eef21",
+                "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-backend@sha256:230df5ad23c9d3c70f1cc571769bf1968aa375a1b6f4e3cb218e0b841d5789dc",
                 "imagePullPolicy": "IfNotPresent",
                 "livenessProbe": {
                   "failureThreshold": 3,
@@ -148,13 +148,9 @@
                   {
                     "name": "API_BASE_URL",
                     "value": "http://backend:8000"
-                  },
-                  {
-                    "name": "NEXT_PUBLIC_API_BASE_URL",
-                    "value": "http://localhost:8000"
                   }
                 ],
-                "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-frontend@sha256:cb70153252adb0535fc4334133c13d04a77977e48ac1e92a0326c24f5be128f4",
+                "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-frontend@sha256:d87bbcbd3cef0965707e8f68f97c96175a8cdaa7543f6d1dcde8145974433ab6",
                 "imagePullPolicy": "IfNotPresent",
                 "livenessProbe": {
                   "failureThreshold": 3,
