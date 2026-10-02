@@ -1,0 +1,14 @@
+{
+  "apiVersion": "v1",
+  "data": {
+    "COLLECTION_CRON_HOUR": "3",
+    "COLLECTION_CRON_MINUTE": "0",
+    "SCHEDULER_ENABLED": "false",
+    "SCHEDULER_TIMEZONE": "Asia/Seoul"
+  },
+  "kind": "ConfigMap",
+  "metadata": {
+    "name": "movie-app-config",
+    "namespace": "movie-app"
+  }
+}

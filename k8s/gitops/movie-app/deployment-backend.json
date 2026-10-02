@@ -1,0 +1,111 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "backend",
+    "namespace": "movie-app"
+  },
+  "spec": {
+    "progressDeadlineSeconds": 600,
+    "replicas": 1,
+    "revisionHistoryLimit": 10,
+    "selector": {
+      "matchLabels": {
+        "app": "backend"
+      }
+    },
+    "strategy": {
+      "rollingUpdate": {
+        "maxSurge": "25%",
+        "maxUnavailable": "25%"
+      },
+      "type": "RollingUpdate"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "backend"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "envFrom": [
+              {
+                "configMapRef": {
+                  "name": "movie-app-config"
+                }
+              },
+              {
+                "secretRef": {
+                  "name": "movie-app-secret"
+                }
+              }
+            ],
+            "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-backend@sha256:230df5ad23c9d3c70f1cc571769bf1968aa375a1b6f4e3cb218e0b841d5789dc",
+            "imagePullPolicy": "IfNotPresent",
+            "livenessProbe": {
+              "failureThreshold": 3,
+              "httpGet": {
+                "path": "/",
+                "port": 8000,
+                "scheme": "HTTP"
+              },
+              "initialDelaySeconds": 30,
+              "periodSeconds": 20,
+              "successThreshold": 1,
+              "timeoutSeconds": 1
+            },
+            "name": "backend",
+            "ports": [
+              {
+                "containerPort": 8000,
+                "protocol": "TCP"
+              }
+            ],
+            "readinessProbe": {
+              "failureThreshold": 3,
+              "httpGet": {
+                "path": "/",
+                "port": 8000,
+                "scheme": "HTTP"
+              },
+              "initialDelaySeconds": 10,
+              "periodSeconds": 10,
+              "successThreshold": 1,
+              "timeoutSeconds": 1
+            },
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            },
+            "startupProbe": {
+              "failureThreshold": 60,
+              "httpGet": {
+                "path": "/",
+                "port": 8000,
+                "scheme": "HTTP"
+              },
+              "periodSeconds": 5,
+              "successThreshold": 1,
+              "timeoutSeconds": 3
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File"
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "terminationGracePeriodSeconds": 30
+      }
+    }
+  }
+}
