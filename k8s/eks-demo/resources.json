@@ -45,7 +45,7 @@
                     }
                   }
                 ],
-                "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-backend@sha256:2e1c7a6e6ea85c3cb00a355a4063097bd57ecd4b6d25d2c6e3650366d8ee7768",
+                "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-backend@sha256:8015ce68c8c0306e059f646edf644dfdd15c5a5ff24134279358f4cf4f4771bd",
                 "imagePullPolicy": "IfNotPresent",
                 "livenessProbe": {
                   "failureThreshold": 3,
@@ -150,7 +150,7 @@
                     "value": "http://backend:8000"
                   }
                 ],
-                "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-frontend@sha256:7eb362442fc42f78b5d55ba8fe5bd9913e25a7eaa79b839750d84fba1e8f79f9",
+                "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-frontend@sha256:07ed9120ebe6bbc3a30a61a3f648fa5a53e8614654ef07d6c90ed4766bde4c56",
                 "imagePullPolicy": "IfNotPresent",
                 "livenessProbe": {
                   "failureThreshold": 3,

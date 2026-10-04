@@ -14,7 +14,7 @@
         "containers": [
           {
             "name": "migrate",
-            "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-backend@sha256:2e1c7a6e6ea85c3cb00a355a4063097bd57ecd4b6d25d2c6e3650366d8ee7768",
+            "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-backend@sha256:8015ce68c8c0306e059f646edf644dfdd15c5a5ff24134279358f4cf4f4771bd",
             "imagePullPolicy": "IfNotPresent",
             "command": [
               "alembic",
