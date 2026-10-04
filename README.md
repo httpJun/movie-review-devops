@@ -157,3 +157,7 @@ bash scripts/infra/check-cleanup.sh
 - 작성한 스크립트로 EKS 재배포부터 종료 확인까지 통합 검증.
 - 확보한 캡처를 비밀정보 확인 후 문서에 연결.
 - 필요에 따라 GitHub OIDC, DB 영구 저장·백업, 앱 전용 지표 및 외부 알림을 확장.
+
+## 검증 캡처
+
+[실습 캡처 및 검증 기록](docs/verification.md)
