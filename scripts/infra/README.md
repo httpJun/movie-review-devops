@@ -70,3 +70,26 @@ bash scripts/infra/install-monitoring.sh --apply
 실습 종료 시 Terraform 삭제 계획을 검토하고 적용한다.
 삭제 후 EKS·EC2·EBS·로드밸런서·NAT Gateway·Elastic IP를 조회한다.
 보존한 ECR 이미지에는 저장 비용이 남을 수 있다.
+
+## 삭제 후 잔존 리소스 확인
+
+```bash
+bash scripts/infra/check-cleanup.sh
+```
+
+- AWS 계정과 실행 주체를 표시한 뒤 서울 리전을 조회한다.
+- EKS, 종료되지 않은 EC2, EBS, ALB/NLB/GWLB,
+  삭제되지 않은 NAT Gateway, Elastic IP 개수를 확인한다.
+- 조회만 수행하며 리소스를 생성하거나 삭제하지 않는다.
+- 종료 코드 0: 조회한 6개 항목 모두 없음
+- 종료 코드 1: 잔존 리소스가 있어 검토 필요
+- 종료 코드 2: 조회 실패 또는 예상하지 못한 응답
+- 계정 확인 실패 시에도 비정상 종료한다.
+- ECR 저장 비용, 다른 서비스·리전, 이미 발생한 비용은 확인하지 않는다.
+
+### 실제 조회 검증 — 2026-10-05
+
+- Bash 문법 검사 통과
+- AWS 계정 확인 성공
+- 서울 리전의 조회 대상 6개 항목 모두 0개 확인
+- 최종 PASS 출력 확인
