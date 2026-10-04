@@ -140,3 +140,36 @@ Grafana 포트포워딩을 종료해도 AWS 리소스는 삭제되지 않는다.
 실습 종료 시 Terraform 삭제 계획을 확인하고 EKS와 노드를 정리한다.
 이후 EKS, EC2, EBS, 로드밸런서, NAT Gateway, Elastic IP 잔존 여부를 확인한다.
 보존한 ECR 이미지에는 저장 비용이 남을 수 있다.
+
+## CPU 경고 규칙 검증 — 2026-10-04
+
+### 규칙
+- 파일: backend-cpu-alert.yaml
+- PrometheusRule: movie-backend-demo-alerts
+- 경고 이름: MovieBackendHighCPU
+- 대상: movie-app 네임스페이스의 backend 컨테이너
+- 조건: 최근 2분 평균 CPU 사용량이 0.2코어를 초과한 상태로 1분 유지
+- 심각도: warning
+- 단기 실습용 임계값이며 운영 환경에서는 별도 조정이 필요하다.
+
+### 검증 결과
+- backend 컨테이너 내부에서 240초간 인위적인 CPU 부하를 발생시켰다.
+- Prometheus에서 경고의 Firing 상태를 확인하고 캡처했다.
+- 부하 종료 후 CPU 사용량이 하락하며 Inactive로 돌아오는 것을 확인하고 캡처했다.
+- 검증 후 backend, frontend, postgres는 모두 Running이며 재시작 횟수는 0이었다.
+- 노드 DiskPressure=False를 확인했다.
+- backend-migrate Job의 Completed 상태는 정상이다.
+
+### 재배포
+모니터링 스택 설치 후 저장소 루트에서 실행한다.
+
+```bash
+kubectl --context movie-review-eks apply \
+  -f k8s/monitoring/backend-cpu-alert.yaml
+'''
+
+### 검증 범위
+
+- Prometheus의 경고 조건 평가, 발생 및 해제를 검증했다.
+- Alertmanager는 비활성화되어 있어 이메일·Slack 등 외부 알림 전송은 검증하지 않았다.
+- 실제 사용자 트래픽에 대한 성능 시험이나 HPA 검증은 이번 실습에 포함하지 않았다.

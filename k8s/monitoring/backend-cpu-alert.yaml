@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: movie-backend-demo-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: movie-app-demo
+      rules:
+        - alert: MovieBackendHighCPU
+          expr: |
+            sum by (namespace, pod) (
+              rate(container_cpu_usage_seconds_total{
+                namespace="movie-app",
+                container="backend",
+                image!=""
+              }[2m])
+            ) > 0.2
+          for: 1m
+          labels:
+            severity: warning
+            scope: demo
+          annotations:
+            summary: "Backend CPU usage is above 0.2 cores"
+            description: "{{ $labels.namespace }}/{{ $labels.pod }} CPU usage exceeded 0.2 cores for 1 minute."
