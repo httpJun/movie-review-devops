@@ -9,6 +9,7 @@ on:
       - "alembic/**"
       - "alembic.ini"
       - "scripts/**"
+      - "!scripts/infra/**"
       - "data/**"
       - "pyproject.toml"
       - "uv.lock"
