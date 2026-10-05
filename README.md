@@ -161,3 +161,7 @@ bash scripts/infra/check-cleanup.sh
 ## 검증 캡처
 
 [실습 캡처 및 검증 기록](docs/verification.md)
+
+## 장애 해결 기록
+
+[DiskPressure 장애 대응 및 CPU 이미지 개선](docs/troubleshooting-disk-pressure.md)
