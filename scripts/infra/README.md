@@ -5,7 +5,13 @@
 - preflight.sh: 로컬 사전 점검 통과
 - bootstrap-app.py: Python 문법 및 로컬 입력 검사 통과
 - install-monitoring.sh: Bash 문법, Helm lint 및 로컬 렌더링 통과
-- 스크립트의 --apply 실행은 아직 EKS에서 검증하지 않았다.
+- 2026-10-05 새 EKS에서 bootstrap-app.py --apply 최초 배포 성공
+- install-monitoring.sh --apply 설치 성공
+- DB 마이그레이션 Complete 및 backend·frontend rollout 성공
+- Prometheus 앱 Pod Ready 지표와 CPU 경고 규칙 로드 확인
+- 노드 DiskPressure=False 확인
+- 검증 후 Terraform 리소스 6개 삭제 및 서울 리전 잔존 검사 PASS
+- 기존 환경 재실행·실패 복구·차단 분기는 이번 검증에 포함하지 않았다.
 - 기반 배포 설정은 이전 실습에서 수동으로 검증했다.
 
 ## 파일
@@ -93,3 +99,7 @@ bash scripts/infra/check-cleanup.sh
 - AWS 계정 확인 성공
 - 서울 리전의 조회 대상 6개 항목 모두 0개 확인
 - 최종 PASS 출력 확인
+
+## 실제 실행 기록
+
+[실제 EKS 재배포 검증 및 캡처](../../docs/redeployment-verification.md)

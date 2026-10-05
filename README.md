@@ -165,3 +165,7 @@ bash scripts/infra/check-cleanup.sh
 ## 장애 해결 기록
 
 [DiskPressure 장애 대응 및 CPU 이미지 개선](docs/troubleshooting-disk-pressure.md)
+
+## 재배포 자동화 검증
+
+[실제 EKS 재배포 자동화 검증](docs/redeployment-verification.md)

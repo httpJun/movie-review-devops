@@ -110,3 +110,7 @@ Alertmanager는 비활성화되어 있었다. 이메일·Slack 전송은 검증�
 - [EKS 단기 실습 기록](../k8s/eks-demo/README.md)
 - [모니터링 실습 기록](../k8s/monitoring/README.md)
 - [재배포 스크립트 안내](../scripts/infra/README.md)
+
+## 재배포 자동화 검증
+
+[2026-10-05 재배포 자동화 검증](redeployment-verification.md)
