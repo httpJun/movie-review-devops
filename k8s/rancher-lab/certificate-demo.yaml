@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: crd-lab
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: lab-selfsigned
+  namespace: crd-lab
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: movie-review-demo
+  namespace: crd-lab
+spec:
+  secretName: movie-review-demo-tls
+  commonName: movie-review.test
+  dnsNames:
+    - movie-review.test
+  duration: 24h
+  renewBefore: 8h
+  issuerRef:
+    name: lab-selfsigned
+    kind: Issuer
+    group: cert-manager.io

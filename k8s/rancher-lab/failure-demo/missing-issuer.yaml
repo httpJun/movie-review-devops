@@ -1,0 +1,16 @@
+# 의도적인 오류 재현용: 존재하지 않는 Issuer를 참조한다.
+# 정상 구성 적용과 분리하여 이 파일만 명시적으로 적용한다.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: movie-review-error-demo
+  namespace: crd-lab
+spec:
+  secretName: movie-review-error-demo-tls
+  commonName: error.movie-review.test
+  dnsNames:
+    - error.movie-review.test
+  issuerRef:
+    name: missing-issuer
+    kind: Issuer
+    group: cert-manager.io
