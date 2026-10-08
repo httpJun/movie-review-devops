@@ -173,7 +173,7 @@ bash scripts/infra/check-cleanup.sh
 - HPA는 Pod 수를 조절했으며 노드 자동 확장은 검증하지 않았습니다.
 - CPU 부하는 인위적인 실습이며 실제 사용자 트래픽 성능 시험이 아닙니다.
 - EKS에서 실제 리뷰 수집부터 LLM 분석까지 전체 파이프라인은 검증하지 않았습니다. 앱 설계 문서의 정확도·응답 시간 KPI는 달성 결과가 아닙니다.
-- GitHub Actions의 AWS 인증은 현재 저장된 액세스 키를 사용합니다. GitHub OIDC 전환은 향후 개선 항목입니다.
+- GitHub Actions의 AWS 인증을 OIDC 기반 IAM Role로 전환했습니다. main 브랜치의 OIDC subject와 audience를 제한하고, backend·frontend ECR 저장소에 필요한 이미지 접근·업로드 권한을 부여했습니다. Role 인증·이미지 빌드 및 업로드·GitOps digest 갱신을 검증했습니다.
 - Secret 값은 Git에 저장하지 않으며, 공개 캡처에서도 비밀번호·토큰을 제외합니다.
 
 ## 완료한 후속 검증
@@ -185,7 +185,7 @@ bash scripts/infra/check-cleanup.sh
 
 ## 선택 확장 과제
 
-- GitHub Actions의 AWS 인증을 OIDC로 전환
+- [완료] GitHub Actions AWS 인증을 OIDC로 전환 — [검증 기록](docs/github-actions-oidc.md)
 - PostgreSQL 영속화 및 백업·복구 검증
 - 앱 요청 지표, HTTP 부하 시험 및 외부 알림 확장
 
