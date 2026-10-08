@@ -139,3 +139,64 @@ ConfigMap 할당량 초과 차단과 한 개 삭제 후 재생성 성공:
 LimitRange 기본값 적용과 CPU 요청량 상한 초과 차단:
 
 ![기본 자원값과 CPU 할당량](images/team-environment/resource-defaults.png)
+
+
+## Rancher 개발자 계정으로 실제 배포 검증
+
+2026-10-08 관리자가 Rancher에서 수동으로 다음을 설정했다.
+
+1. alpha-project 프로젝트 생성
+2. 기존 team-alpha 네임스페이스를 프로젝트에 연결
+3. alpha-dev 사용자 생성, 전역 권한 User-Base 부여
+4. alpha-project에서 Custom → Manage Workloads 역할 부여
+
+위 설정은 환경 생성 스크립트의 자동화 범위에 포함하지 않는다.
+team-beta는 alpha-project에 연결하지 않았다.
+
+시크릿 창에서 alpha-dev로 로그인한 뒤 Rancher kubectl Shell에서
+직접 실행했다. 앞선 team-bot impersonation 시험과 구분한다.
+
+| 항목 | 결과 |
+|---|---|
+| team-alpha Deployment 생성 권한 | yes |
+| ResourceQuota patch 권한 | no |
+| team-beta Pod 목록 조회 권한 | no |
+| alpha-web Deployment 배포 | rollout 성공, Pod 1/1 Running |
+| 자원 설정 생략 시 기본값 | requests 100m/64Mi, limits 250m/128Mi |
+| 컨테이너 내부 HTTP 요청 | Welcome to nginx! 응답 |
+| team-beta 실제 Pod 조회 | Forbidden: cannot list pods |
+| team-alpha 실제 할당량 수정 요청 | Forbidden: cannot patch resourcequotas |
+
+샘플은 nginx:stable-alpine 이미지, 복제본 1개로 구성했다.
+ServiceAccount 토큰 자동 마운트를 끄고 HTTP readinessProbe를 설정했다.
+이미지 태그는 가변 태그이므로 향후 재현 시 이미지 버전이 달라질 수 있다.
+
+웹 응답 확인 명령:
+
+    kubectl exec -n team-alpha deployment/alpha-web -- wget -q -O - http://127.0.0.1/
+
+다른 팀 접근 거부 확인:
+
+    kubectl get pods -n team-beta
+
+할당량 변경 거부 확인:
+
+    kubectl patch resourcequota team-budget -n team-alpha --type=merge -p '{"spec":{"hard":{"pods":"100"}}}' --dry-run=server
+
+실제 API 오류의 사용자 ID는 u-6grqv였다.
+이는 실습 환경의 alpha-dev 내부 ID이며 재구성 시 달라질 수 있다.
+
+이번 검증은 관리자 환경 생성부터 개발자 로그인·배포·권한 제한까지
+연결한 로컬 실습이다. 외부 브라우저 접속, 팀 간 네트워크 격리,
+운영 환경의 완전한 테넌트 격리를 검증한 것은 아니다.
+Manage Workloads 역할의 모든 권한을 시험한 것도 아니다.
+
+
+## 개발자 배포 재현 파일과 캡처
+
+[샘플 Deployment YAML](../k8s/team-environment/alpha-web.yaml)
+
+권한 검증 재현 시 alpha-dev로 인증된 환경에서 위 YAML을 적용한다.
+Mac의 관리자 context로 적용하면 개발자 배포 권한을 검증한 것이 아니다.
+
+![개발자 웹 응답 및 접근 제한](images/team-environment/developer-access-check.png)

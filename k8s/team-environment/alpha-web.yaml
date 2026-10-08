@@ -1,0 +1,29 @@
+# 사전 조건: team-alpha 환경 생성 및 개발자 권한 연결
+# resources를 생략하여 LimitRange 기본값 적용을 확인한다.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpha-web
+  namespace: team-alpha
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpha-web
+  template:
+    metadata:
+      labels:
+        app: alpha-web
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: web
+          image: nginx:stable-alpine
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 2
+            periodSeconds: 5

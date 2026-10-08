@@ -43,7 +43,7 @@ FastAPI·Next.js·PostgreSQL 애플리케이션을 배포 대상으로 사용했
 
 Python 스크립트로 팀별 Namespace·ResourceQuota·LimitRange·ServiceAccount·RBAC를 생성했습니다. 로컬 k3d에서 반복 적용 시 unchanged, 자기 팀 ConfigMap 관리 허용, 다른 팀 조회 거부, 할당량 초과 차단과 삭제 후 재생성을 검증했습니다.
 
-서버 dry-run으로 컨테이너 기본 자원값 적용과 CPU requests 상한 초과 거부도 확인했습니다. 관리자용 기본 환경 구성 도구이며 Rancher 프로젝트 연결·앱 배포·네트워크 격리는 포함하지 않습니다.
+서버 dry-run으로 컨테이너 기본 자원값 적용과 CPU requests 상한 초과 거부도 확인했습니다. 자동화 범위는 관리자용 기본 환경 구성입니다. 후속 실습에서는 Rancher 프로젝트와 개발자 계정을 수동 연결하고, 해당 계정으로 샘플 앱 배포·컨테이너 내부 HTTP 응답·다른 팀 조회 및 할당량 수정 거부를 확인했습니다. 네트워크 격리는 검증하지 않았습니다.
 
 [구현 및 검증 기록](docs/team-environment-automation.md)
 
