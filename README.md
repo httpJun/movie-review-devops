@@ -202,3 +202,14 @@ bash scripts/infra/check-cleanup.sh
 ## 재배포 자동화 검증
 
 [실제 EKS 재배포 자동화 검증](docs/redeployment-verification.md)
+
+
+## 로컬 다중 노드 장애·복구 검증
+
+k3d 워커 2개에 웹 Pod를 분산하고, 워커 하나를 강제 중지해
+Service 요청 영향과 대체 Pod 생성을 검증했습니다.
+613회 요청 중 12회가 실패했으며, 정상 워커에서 요청 처리가 안정된 뒤
+대체 Pod가 생성됐습니다. 노드 중지 완료부터 대체 Pod 최초 응답까지
+5분 46초가 걸렸으며, 이는 서비스 중단 시간이 아닙니다.
+
+[실습 구성·측정 결과·한계](docs/node-recovery.md)

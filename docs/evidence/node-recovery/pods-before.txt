@@ -1,0 +1,4 @@
+NAME                            READY   STATUS    RESTARTS   AGE     IP           NODE                         NOMINATED NODE   READINESS GATES
+recovery-probe                  1/1     Running   0          98s     10.42.1.67   k3d-rancher-lab-agent-0      <none>           <none>
+recovery-web-6f79c6886b-fptzj   1/1     Running   0          3m27s   10.42.2.3    k3d-rancher-lab-worker-2-0   <none>           <none>
+recovery-web-6f79c6886b-kk8p2   1/1     Running   0          3m27s   10.42.1.66   k3d-rancher-lab-agent-0      <none>           <none>

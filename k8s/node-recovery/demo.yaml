@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: node-recovery
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recovery-web
+  namespace: node-recovery
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: recovery-web
+  template:
+    metadata:
+      labels:
+        app: recovery-web
+    spec:
+      automountServiceAccountToken: false
+      nodeSelector:
+        recovery-lab: "true"
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: recovery-web
+      containers:
+        - name: web
+          image: nginx:stable-alpine
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              printf 'pod=%s\n' "$HOSTNAME" > /usr/share/nginx/html/index.html
+              exec nginx -g 'daemon off;'
+          ports:
+            - name: http
+              containerPort: 80
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 250m
+              memory: 64Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 2
+            timeoutSeconds: 1
+            failureThreshold: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: recovery-web
+  namespace: node-recovery
+spec:
+  selector:
+    app: recovery-web
+  ports:
+    - port: 80
+      targetPort: http

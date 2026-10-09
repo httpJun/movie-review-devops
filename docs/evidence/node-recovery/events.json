@@ -1,0 +1,903 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "action": "Binding",
+            "apiVersion": "v1",
+            "eventTime": "2026-10-09T17:01:00.818627Z",
+            "firstTimestamp": null,
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "Pod",
+                "name": "recovery-probe",
+                "namespace": "node-recovery",
+                "resourceVersion": "117196",
+                "uid": "a03afe31-03e9-4f11-998b-b2e358ad8ac6"
+            },
+            "kind": "Event",
+            "lastTimestamp": null,
+            "message": "Successfully assigned node-recovery/recovery-probe to k3d-rancher-lab-agent-0",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T17:01:00Z",
+                "name": "recovery-probe.18dceb1cd30652f2",
+                "namespace": "node-recovery",
+                "resourceVersion": "117198",
+                "uid": "f4d3feb4-81e7-4b4c-a2a1-7fdb4e4d750c"
+            },
+            "reason": "Scheduled",
+            "reportingComponent": "default-scheduler",
+            "reportingInstance": "default-scheduler-k3d-rancher-lab-server-0",
+            "source": {},
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T17:01:00Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{probe}",
+                "kind": "Pod",
+                "name": "recovery-probe",
+                "namespace": "node-recovery",
+                "resourceVersion": "117197",
+                "uid": "a03afe31-03e9-4f11-998b-b2e358ad8ac6"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T17:01:00Z",
+            "message": "Pulling image \"busybox:1.37\"",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T17:01:00Z",
+                "name": "recovery-probe.18dceb1cd8de18ea",
+                "namespace": "node-recovery",
+                "resourceVersion": "117200",
+                "uid": "540ef2e1-2568-4ba1-9d44-0ed4d21d1a25"
+            },
+            "reason": "Pulling",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-agent-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-agent-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T17:01:04Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{probe}",
+                "kind": "Pod",
+                "name": "recovery-probe",
+                "namespace": "node-recovery",
+                "resourceVersion": "117197",
+                "uid": "a03afe31-03e9-4f11-998b-b2e358ad8ac6"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T17:01:04Z",
+            "message": "Successfully pulled image \"busybox:1.37\" in 3.981s (3.981s including waiting). Image size: 1911395 bytes.",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T17:01:04Z",
+                "name": "recovery-probe.18dceb1dc62e42a2",
+                "namespace": "node-recovery",
+                "resourceVersion": "117220",
+                "uid": "38889bc9-319b-4643-86c4-71b04e4ebb39"
+            },
+            "reason": "Pulled",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-agent-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-agent-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T17:01:04Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{probe}",
+                "kind": "Pod",
+                "name": "recovery-probe",
+                "namespace": "node-recovery",
+                "resourceVersion": "117197",
+                "uid": "a03afe31-03e9-4f11-998b-b2e358ad8ac6"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T17:01:04Z",
+            "message": "Container created",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T17:01:04Z",
+                "name": "recovery-probe.18dceb1dc6930bbd",
+                "namespace": "node-recovery",
+                "resourceVersion": "117221",
+                "uid": "c8e8d173-0260-4362-819f-253ecb3440fb"
+            },
+            "reason": "Created",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-agent-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-agent-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T17:01:04Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{probe}",
+                "kind": "Pod",
+                "name": "recovery-probe",
+                "namespace": "node-recovery",
+                "resourceVersion": "117197",
+                "uid": "a03afe31-03e9-4f11-998b-b2e358ad8ac6"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T17:01:04Z",
+            "message": "Container started",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T17:01:04Z",
+                "name": "recovery-probe.18dceb1dc7f271bf",
+                "namespace": "node-recovery",
+                "resourceVersion": "117222",
+                "uid": "8bf197e4-646c-4ad7-9148-3c669f7f1562"
+            },
+            "reason": "Started",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-agent-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-agent-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "action": "Binding",
+            "apiVersion": "v1",
+            "eventTime": "2026-10-09T16:59:11.779661Z",
+            "firstTimestamp": null,
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-fptzj",
+                "namespace": "node-recovery",
+                "resourceVersion": "116722",
+                "uid": "9b120fe9-8c33-41aa-8430-51eb6185850e"
+            },
+            "kind": "Event",
+            "lastTimestamp": null,
+            "message": "Successfully assigned node-recovery/recovery-web-6f79c6886b-fptzj to k3d-rancher-lab-worker-2-0",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:11Z",
+                "name": "recovery-web-6f79c6886b-fptzj.18dceb036fcbb031",
+                "namespace": "node-recovery",
+                "resourceVersion": "116731",
+                "uid": "6ac12063-253e-4127-9bec-f6e22ebf94fb"
+            },
+            "reason": "Scheduled",
+            "reportingComponent": "default-scheduler",
+            "reportingInstance": "default-scheduler-k3d-rancher-lab-server-0",
+            "source": {},
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T16:59:11Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-fptzj",
+                "namespace": "node-recovery",
+                "resourceVersion": "116729",
+                "uid": "9b120fe9-8c33-41aa-8430-51eb6185850e"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T16:59:11Z",
+            "message": "Pulling image \"nginx:stable-alpine\"",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:11Z",
+                "name": "recovery-web-6f79c6886b-fptzj.18dceb0376e7f73e",
+                "namespace": "node-recovery",
+                "resourceVersion": "116739",
+                "uid": "a571fd1a-0803-4788-8cf8-d6a6ccdd7dfb"
+            },
+            "reason": "Pulling",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-worker-2-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-worker-2-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T16:59:17Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-fptzj",
+                "namespace": "node-recovery",
+                "resourceVersion": "116729",
+                "uid": "9b120fe9-8c33-41aa-8430-51eb6185850e"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T16:59:17Z",
+            "message": "Successfully pulled image \"nginx:stable-alpine\" in 5.678s (5.678s including waiting). Image size: 25991522 bytes.",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:17Z",
+                "name": "recovery-web-6f79c6886b-fptzj.18dceb04c958e50d",
+                "namespace": "node-recovery",
+                "resourceVersion": "116773",
+                "uid": "00cace98-19ca-4308-b437-0f61cccb5072"
+            },
+            "reason": "Pulled",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-worker-2-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-worker-2-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T16:59:17Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-fptzj",
+                "namespace": "node-recovery",
+                "resourceVersion": "116729",
+                "uid": "9b120fe9-8c33-41aa-8430-51eb6185850e"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T16:59:17Z",
+            "message": "Container created",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:17Z",
+                "name": "recovery-web-6f79c6886b-fptzj.18dceb04c9e6e78b",
+                "namespace": "node-recovery",
+                "resourceVersion": "116774",
+                "uid": "99237791-90a8-40a2-ad07-afa327484c58"
+            },
+            "reason": "Created",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-worker-2-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-worker-2-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T16:59:17Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-fptzj",
+                "namespace": "node-recovery",
+                "resourceVersion": "116729",
+                "uid": "9b120fe9-8c33-41aa-8430-51eb6185850e"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T16:59:17Z",
+            "message": "Container started",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:17Z",
+                "name": "recovery-web-6f79c6886b-fptzj.18dceb04cb3ef81c",
+                "namespace": "node-recovery",
+                "resourceVersion": "116775",
+                "uid": "3443b3d3-d2ce-4dff-b7ed-687f74a41246"
+            },
+            "reason": "Started",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-worker-2-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-worker-2-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T16:59:17Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-fptzj",
+                "namespace": "node-recovery",
+                "resourceVersion": "116729",
+                "uid": "9b120fe9-8c33-41aa-8430-51eb6185850e"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T16:59:17Z",
+            "message": "Readiness probe failed: Get \"http://10.42.2.3:80/\": dial tcp 10.42.2.3:80: connect: connection refused",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:17Z",
+                "name": "recovery-web-6f79c6886b-fptzj.18dceb04cb6bd935",
+                "namespace": "node-recovery",
+                "resourceVersion": "116776",
+                "uid": "84b48cb2-893e-4b30-9a38-43c7bc948005"
+            },
+            "reason": "Unhealthy",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-worker-2-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-worker-2-0"
+            },
+            "type": "Warning"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T17:03:23Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-fptzj",
+                "namespace": "node-recovery",
+                "resourceVersion": "116803",
+                "uid": "9b120fe9-8c33-41aa-8430-51eb6185850e"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T17:03:23Z",
+            "message": "Node is not ready",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T17:03:23Z",
+                "name": "recovery-web-6f79c6886b-fptzj.18dceb3df7c0b64f",
+                "namespace": "node-recovery",
+                "resourceVersion": "117755",
+                "uid": "3b970762-786c-4022-9a03-31e6094b7b06"
+            },
+            "reason": "NodeNotReady",
+            "reportingComponent": "node-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "node-controller"
+            },
+            "type": "Warning"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T17:08:23Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-fptzj",
+                "namespace": "node-recovery"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T17:08:23Z",
+            "message": "Marking for deletion Pod node-recovery/recovery-web-6f79c6886b-fptzj",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T17:08:23Z",
+                "name": "recovery-web-6f79c6886b-fptzj.18dceb83d5b2ed56",
+                "namespace": "node-recovery",
+                "resourceVersion": "118899",
+                "uid": "fef33b83-2c28-4ef3-a185-ead906f308ba"
+            },
+            "reason": "TaintManagerEviction",
+            "reportingComponent": "taint-eviction-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "taint-eviction-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "action": "Binding",
+            "apiVersion": "v1",
+            "eventTime": "2026-10-09T16:59:11.780615Z",
+            "firstTimestamp": null,
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-kk8p2",
+                "namespace": "node-recovery",
+                "resourceVersion": "116725",
+                "uid": "e14db593-264e-4ef1-be37-05b480b42288"
+            },
+            "kind": "Event",
+            "lastTimestamp": null,
+            "message": "Successfully assigned node-recovery/recovery-web-6f79c6886b-kk8p2 to k3d-rancher-lab-agent-0",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:11Z",
+                "name": "recovery-web-6f79c6886b-kk8p2.18dceb036fda437a",
+                "namespace": "node-recovery",
+                "resourceVersion": "116732",
+                "uid": "b554bf51-1402-485e-9f48-d14679be91ae"
+            },
+            "reason": "Scheduled",
+            "reportingComponent": "default-scheduler",
+            "reportingInstance": "default-scheduler-k3d-rancher-lab-server-0",
+            "source": {},
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T16:59:11Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-kk8p2",
+                "namespace": "node-recovery",
+                "resourceVersion": "116730",
+                "uid": "e14db593-264e-4ef1-be37-05b480b42288"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T16:59:11Z",
+            "message": "Pulling image \"nginx:stable-alpine\"",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:11Z",
+                "name": "recovery-web-6f79c6886b-kk8p2.18dceb0376d6488d",
+                "namespace": "node-recovery",
+                "resourceVersion": "116738",
+                "uid": "6c6d959c-ba1f-4a2d-bf58-e5dc1e339363"
+            },
+            "reason": "Pulling",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-agent-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-agent-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T16:59:17Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-kk8p2",
+                "namespace": "node-recovery",
+                "resourceVersion": "116730",
+                "uid": "e14db593-264e-4ef1-be37-05b480b42288"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T16:59:17Z",
+            "message": "Successfully pulled image \"nginx:stable-alpine\" in 5.146s (5.146s including waiting). Image size: 25991522 bytes.",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:17Z",
+                "name": "recovery-web-6f79c6886b-kk8p2.18dceb04a99f549c",
+                "namespace": "node-recovery",
+                "resourceVersion": "116764",
+                "uid": "297da9e4-b752-4fab-be4f-bd265e2af22c"
+            },
+            "reason": "Pulled",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-agent-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-agent-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T16:59:17Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-kk8p2",
+                "namespace": "node-recovery",
+                "resourceVersion": "116730",
+                "uid": "e14db593-264e-4ef1-be37-05b480b42288"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T16:59:17Z",
+            "message": "Container created",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:17Z",
+                "name": "recovery-web-6f79c6886b-kk8p2.18dceb04aa39af95",
+                "namespace": "node-recovery",
+                "resourceVersion": "116765",
+                "uid": "2c9e5c31-421d-4381-8a70-0b70568601ee"
+            },
+            "reason": "Created",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-agent-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-agent-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T16:59:17Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-kk8p2",
+                "namespace": "node-recovery",
+                "resourceVersion": "116730",
+                "uid": "e14db593-264e-4ef1-be37-05b480b42288"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T16:59:17Z",
+            "message": "Container started",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:17Z",
+                "name": "recovery-web-6f79c6886b-kk8p2.18dceb04abd9c841",
+                "namespace": "node-recovery",
+                "resourceVersion": "116766",
+                "uid": "0f2c602d-5c6a-421d-a290-cf9eb6872cae"
+            },
+            "reason": "Started",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-agent-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-agent-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T16:59:17Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-kk8p2",
+                "namespace": "node-recovery",
+                "resourceVersion": "116730",
+                "uid": "e14db593-264e-4ef1-be37-05b480b42288"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T16:59:17Z",
+            "message": "Readiness probe failed: Get \"http://10.42.1.66:80/\": dial tcp 10.42.1.66:80: connect: connection refused",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:17Z",
+                "name": "recovery-web-6f79c6886b-kk8p2.18dceb04abfafe35",
+                "namespace": "node-recovery",
+                "resourceVersion": "116767",
+                "uid": "c6521225-6688-4027-aaec-22a9d7468627"
+            },
+            "reason": "Unhealthy",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-agent-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-agent-0"
+            },
+            "type": "Warning"
+        },
+        {
+            "action": "Binding",
+            "apiVersion": "v1",
+            "eventTime": "2026-10-09T17:08:23.364957Z",
+            "firstTimestamp": null,
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-n525q",
+                "namespace": "node-recovery",
+                "resourceVersion": "118906",
+                "uid": "401fb6e9-9cf4-4c16-8502-76f807378f6a"
+            },
+            "kind": "Event",
+            "lastTimestamp": null,
+            "message": "Successfully assigned node-recovery/recovery-web-6f79c6886b-n525q to k3d-rancher-lab-agent-0",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T17:08:23Z",
+                "name": "recovery-web-6f79c6886b-n525q.18dceb83dcd76aec",
+                "namespace": "node-recovery",
+                "resourceVersion": "118912",
+                "uid": "ebfc33bf-ccad-4063-b8c5-7d3f509a28f2"
+            },
+            "reason": "Scheduled",
+            "reportingComponent": "default-scheduler",
+            "reportingInstance": "default-scheduler-k3d-rancher-lab-server-0",
+            "source": {},
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T17:08:23Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-n525q",
+                "namespace": "node-recovery",
+                "resourceVersion": "118910",
+                "uid": "401fb6e9-9cf4-4c16-8502-76f807378f6a"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T17:08:23Z",
+            "message": "Container image \"nginx:stable-alpine\" already present on machine and can be accessed by the pod",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T17:08:23Z",
+                "name": "recovery-web-6f79c6886b-n525q.18dceb83e1ee6e60",
+                "namespace": "node-recovery",
+                "resourceVersion": "118918",
+                "uid": "11877c23-4434-415d-a0e1-5521afd80b4c"
+            },
+            "reason": "Pulled",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-agent-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-agent-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T17:08:23Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-n525q",
+                "namespace": "node-recovery",
+                "resourceVersion": "118910",
+                "uid": "401fb6e9-9cf4-4c16-8502-76f807378f6a"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T17:08:23Z",
+            "message": "Container created",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T17:08:23Z",
+                "name": "recovery-web-6f79c6886b-n525q.18dceb83e286fe0a",
+                "namespace": "node-recovery",
+                "resourceVersion": "118920",
+                "uid": "89913703-cb12-4225-a776-a862ccac53eb"
+            },
+            "reason": "Created",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-agent-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-agent-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T17:08:23Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-n525q",
+                "namespace": "node-recovery",
+                "resourceVersion": "118910",
+                "uid": "401fb6e9-9cf4-4c16-8502-76f807378f6a"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T17:08:23Z",
+            "message": "Container started",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T17:08:23Z",
+                "name": "recovery-web-6f79c6886b-n525q.18dceb83e3af382f",
+                "namespace": "node-recovery",
+                "resourceVersion": "118923",
+                "uid": "081abd69-5541-411f-9182-6de3ea40315c"
+            },
+            "reason": "Started",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-agent-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-agent-0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T17:08:23Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{web}",
+                "kind": "Pod",
+                "name": "recovery-web-6f79c6886b-n525q",
+                "namespace": "node-recovery",
+                "resourceVersion": "118910",
+                "uid": "401fb6e9-9cf4-4c16-8502-76f807378f6a"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T17:08:23Z",
+            "message": "Readiness probe failed: Get \"http://10.42.1.68:80/\": dial tcp 10.42.1.68:80: connect: connection refused",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T17:08:23Z",
+                "name": "recovery-web-6f79c6886b-n525q.18dceb83e3ca3463",
+                "namespace": "node-recovery",
+                "resourceVersion": "118924",
+                "uid": "08bf0d78-5729-4ab3-85e6-dea65e9174e8"
+            },
+            "reason": "Unhealthy",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "k3d-rancher-lab-agent-0",
+            "source": {
+                "component": "kubelet",
+                "host": "k3d-rancher-lab-agent-0"
+            },
+            "type": "Warning"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T16:59:11Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "ReplicaSet",
+                "name": "recovery-web-6f79c6886b",
+                "namespace": "node-recovery",
+                "resourceVersion": "116712",
+                "uid": "2508f087-b728-4265-89dc-166ea25237d7"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T16:59:11Z",
+            "message": "Created pod: recovery-web-6f79c6886b-fptzj",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:11Z",
+                "name": "recovery-web-6f79c6886b.18dceb036f63e129",
+                "namespace": "node-recovery",
+                "resourceVersion": "116724",
+                "uid": "af69c6fd-c196-4d44-a97c-1e5f4b3275b4"
+            },
+            "reason": "SuccessfulCreate",
+            "reportingComponent": "replicaset-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "replicaset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T16:59:11Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "ReplicaSet",
+                "name": "recovery-web-6f79c6886b",
+                "namespace": "node-recovery",
+                "resourceVersion": "116712",
+                "uid": "2508f087-b728-4265-89dc-166ea25237d7"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T16:59:11Z",
+            "message": "Created pod: recovery-web-6f79c6886b-kk8p2",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:11Z",
+                "name": "recovery-web-6f79c6886b.18dceb036f8fc23c",
+                "namespace": "node-recovery",
+                "resourceVersion": "116726",
+                "uid": "34ae89c4-3a3a-439f-8ae5-d330f7f8cac2"
+            },
+            "reason": "SuccessfulCreate",
+            "reportingComponent": "replicaset-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "replicaset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T17:08:23Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "ReplicaSet",
+                "name": "recovery-web-6f79c6886b",
+                "namespace": "node-recovery",
+                "resourceVersion": "117759",
+                "uid": "2508f087-b728-4265-89dc-166ea25237d7"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T17:08:23Z",
+            "message": "Created pod: recovery-web-6f79c6886b-n525q",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T17:08:23Z",
+                "name": "recovery-web-6f79c6886b.18dceb83dca47436",
+                "namespace": "node-recovery",
+                "resourceVersion": "118908",
+                "uid": "3e06b912-0297-4466-978c-935393a202a2"
+            },
+            "reason": "SuccessfulCreate",
+            "reportingComponent": "replicaset-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "replicaset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-10-09T16:59:11Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "name": "recovery-web",
+                "namespace": "node-recovery",
+                "resourceVersion": "116710",
+                "uid": "265b0ce3-0508-4cac-9754-df440bb5cd68"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-10-09T16:59:11Z",
+            "message": "Scaled up replica set recovery-web-6f79c6886b from 0 to 2",
+            "metadata": {
+                "creationTimestamp": "2026-10-09T16:59:11Z",
+                "name": "recovery-web.18dceb0345c6e70d",
+                "namespace": "node-recovery",
+                "resourceVersion": "116713",
+                "uid": "9cd1570a-065a-46e4-8afe-4fd2f8c9fdaa"
+            },
+            "reason": "ScalingReplicaSet",
+            "reportingComponent": "deployment-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "deployment-controller"
+            },
+            "type": "Normal"
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
