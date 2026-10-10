@@ -1,0 +1,20 @@
+LAST SEEN   TYPE      REASON                   OBJECT                                MESSAGE
+5m48s       Normal    SuccessfulCreate         replicaset/capacity-test-674d64654d   Created pod: capacity-test-674d64654d-hmmt6
+5m47s       Warning   FailedScheduling         pod/capacity-test-674d64654d-qrxk9    0/1 nodes are available: 1 Insufficient cpu. no new claims to deallocate, preemption: 0/1 nodes are available: 1 No preemption victims found for incoming pod.
+5m48s       Normal    ScalingReplicaSet        deployment/capacity-test              Scaled up replica set capacity-test-674d64654d from 0 to 2
+5m47s       Normal    Scheduled                pod/capacity-test-674d64654d-hmmt6    Successfully assigned autoscaler-test/capacity-test-674d64654d-hmmt6 to ip-10-0-0-158.ap-northeast-2.compute.internal
+5m48s       Normal    SuccessfulCreate         replicaset/capacity-test-674d64654d   Created pod: capacity-test-674d64654d-qrxk9
+5m47s       Normal    Pulling                  pod/capacity-test-674d64654d-hmmt6    Pulling image "busybox:1.37"
+5m44s       Normal    Pulled                   pod/capacity-test-674d64654d-hmmt6    Successfully pulled image "busybox:1.37" in 3.166s (3.166s including waiting). Image size: 2222118 bytes.
+5m44s       Normal    Created                  pod/capacity-test-674d64654d-hmmt6    Container created
+5m44s       Normal    Started                  pod/capacity-test-674d64654d-hmmt6    Container started
+5m37s       Normal    TriggeredScaleUp         pod/capacity-test-674d64654d-qrxk9    pod triggered scale-up: [{eks-movie-review-nodes-a2d09238-9053-177f-d185-a1521530c59e 1->2 (max: 2)}]
+4m49s       Warning   FailedScheduling         pod/capacity-test-674d64654d-qrxk9    0/2 nodes are available: 1 Insufficient cpu, 1 node(s) had untolerated taint(s). no new claims to deallocate, preemption: 0/2 nodes are available: 1 No preemption victims found for incoming pod, 1 Preemption is not helpful for scheduling.
+4m54s       Warning   FailedScheduling         pod/capacity-test-674d64654d-qrxk9    0/2 nodes are available: 1 Insufficient cpu, 1 node(s) had untolerated taint(s). no new claims to deallocate, preemption: 0/2 nodes are available: 1 No preemption victims found for incoming pod, 1 Preemption is not helpful for scheduling.
+4m32s       Normal    Scheduled                pod/capacity-test-674d64654d-qrxk9    Successfully assigned autoscaler-test/capacity-test-674d64654d-qrxk9 to ip-10-0-1-59.ap-northeast-2.compute.internal
+4m30s       Warning   FailedCreatePodSandBox   pod/capacity-test-674d64654d-qrxk9    Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "8a4f95ad284543cf9dfac99cd1a0f192312b1c38451efe1e2a77c0a1a6dea163": plugin type="aws-cni" name="aws-cni" failed (add): add cmd: failed to setup network policy
+4m30s       Normal    TaintManagerEviction     pod/capacity-test-674d64654d-qrxk9    Cancelling deletion of Pod autoscaler-test/capacity-test-674d64654d-qrxk9
+4m14s       Normal    Pulling                  pod/capacity-test-674d64654d-qrxk9    Pulling image "busybox:1.37"
+4m10s       Normal    Pulled                   pod/capacity-test-674d64654d-qrxk9    Successfully pulled image "busybox:1.37" in 3.822s (3.822s including waiting). Image size: 2222118 bytes.
+4m10s       Normal    Created                  pod/capacity-test-674d64654d-qrxk9    Container created
+4m10s       Normal    Started                  pod/capacity-test-674d64654d-qrxk9    Container started

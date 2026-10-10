@@ -1,0 +1,3 @@
+NAME                             READY   STATUS    RESTARTS   AGE     IP           NODE                                            NOMINATED NODE   READINESS GATES
+capacity-test-674d64654d-hmmt6   1/1     Running   0          5m47s   10.0.0.224   ip-10-0-0-158.ap-northeast-2.compute.internal   <none>           <none>
+capacity-test-674d64654d-qrxk9   1/1     Running   0          5m47s   10.0.1.137   ip-10-0-1-59.ap-northeast-2.compute.internal    <none>           <none>

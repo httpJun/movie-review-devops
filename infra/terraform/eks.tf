@@ -94,7 +94,7 @@ resource "aws_iam_role_policy_attachment" "eks_node_cni" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
 }
 
-# 관리형 워커 노드 1대
+# 관리형 워커 노드: 초기 1대, 자동 확장 최대 2대
 resource "aws_eks_node_group" "main" {
   cluster_name    = aws_eks_cluster.main.name
   node_group_name = "${var.project_name}-nodes"
@@ -111,7 +111,12 @@ resource "aws_eks_node_group" "main" {
   scaling_config {
     desired_size = 1
     min_size     = 1
-    max_size     = 1
+    max_size     = 2
+  }
+
+  # 실행 중 desired_size는 Cluster Autoscaler가 관리한다.
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
   }
 
   update_config {

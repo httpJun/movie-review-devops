@@ -1,0 +1,20 @@
+[
+    {
+        "Time": "2026-10-10T06:51:59.119000+00:00",
+        "Status": "Successful",
+        "Description": "Terminating EC2 instance: i-0807b77b91ffe9680",
+        "Cause": "At 2026-10-10T06:51:59Z instance i-0807b77b91ffe9680 was taken out of service in response to a user request, shrinking the capacity from 2 to 1."
+    },
+    {
+        "Time": "2026-10-10T06:35:42.553000+00:00",
+        "Status": "Successful",
+        "Description": "Launching a new EC2 instance: i-0807b77b91ffe9680",
+        "Cause": "At 2026-10-10T06:35:30Z a user request explicitly set group desired capacity changing the desired capacity from 1 to 2.  At 2026-10-10T06:35:40Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 1 to 2."
+    },
+    {
+        "Time": "2026-10-10T06:13:20.861000+00:00",
+        "Status": "Successful",
+        "Description": "Launching a new EC2 instance: i-033b57fee543430a4",
+        "Cause": "At 2026-10-10T06:13:16Z a user request created an AutoScalingGroup changing the desired capacity from 0 to 1.  At 2026-10-10T06:13:18Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 0 to 1."
+    }
+]
