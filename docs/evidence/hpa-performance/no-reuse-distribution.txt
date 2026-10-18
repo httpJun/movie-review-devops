@@ -1,0 +1,4 @@
+UTC window: 2026-10-18T18:27:39Z <= timestamp < 2026-10-18T18:28:09Z
+Filter: GET /movies HTTP/
+Existing Pod hpa-backend-699f9f67c8-n9pkc: 355
+New Pod hpa-backend-699f9f67c8-2hzsc: 331
