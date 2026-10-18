@@ -1,0 +1,11 @@
+{
+  "context": "k3d-rancher-lab",
+  "source_database": "movie_app_lab",
+  "target_database": "movie_restore_20261019_023006_307900",
+  "backup_bytes": 109402,
+  "restore_seconds": 0.15342,
+  "snapshot_match": true,
+  "table_list_match": true,
+  "orphan_reviews": 0,
+  "passed": true
+}
