@@ -123,3 +123,20 @@ bash scripts/infra/install-monitoring.sh --check
 - **비용:** 필요한 실습 시간에만 실행 리소스를 생성하고 종료 후 삭제합니다. 2026-10-10 EKS 목록이 비어 있고 실습 EC2 2대가 종료됐으며 서울 리전 EBS가 없음을 확인했습니다. 보존한 ECR 이미지에는 저장 비용이 남을 수 있습니다.
 
 종료 점검은 `bash scripts/infra/check-cleanup.sh`로 수행합니다. 조회 범위는 서울 리전의 지정 리소스이며 다른 리전·서비스나 청구액 전체를 확인하는 검사는 아닙니다. Secret 값은 Git에 저장하지 않습니다.
+
+## PostgreSQL 백업·복구 검증
+
+로컬 k3d에서 실제 앱의 Alembic 마이그레이션을 적용한 PostgreSQL DB에
+영화 100건·리뷰 10,000건의 테스트 데이터를 입력하고,
+논리 백업을 새 DB에 복원했습니다.
+
+- 원본과 복원 DB의 행 수·데이터 체크섬·Alembic 버전 일치
+- public 테이블 목록 일치, 연결된 영화가 없는 리뷰 0건
+- 백업 크기 109,402바이트, 자동 검증 실행의 복원 명령 소요 시간 0.15342초
+- 백업·새 DB 복원·데이터 비교를 Python 스크립트로 자동화
+
+소규모 로컬 테스트이며, EKS의 DB 복구·API 정상화·정기 백업은 미검증입니다.
+측정 시간은 전체 서비스 복구 시간이 아닙니다.
+
+[검증 과정과 결과](docs/postgres-backup-restore.md) ·
+[자동 검증 스크립트](scripts/infra/verify-postgres-restore.py)
