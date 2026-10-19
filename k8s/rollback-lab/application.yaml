@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rollback-lab
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/httpJun/movie-review-devops.git
+    targetRevision: feat/deployment-rollback
+    path: k8s/rollback-lab/app
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: rollback-lab
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true

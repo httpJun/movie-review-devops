@@ -1,0 +1,111 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "annotations": {
+      "argocd.argoproj.io/tracking-id": "rollback-lab:apps/Deployment:rollback-lab/rollback-web",
+      "deployment.kubernetes.io/revision": "2",
+      "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{\"argocd.argoproj.io/tracking-id\":\"rollback-lab:apps/Deployment:rollback-lab/rollback-web\"},\"name\":\"rollback-web\",\"namespace\":\"rollback-lab\"},\"spec\":{\"progressDeadlineSeconds\":60,\"replicas\":1,\"revisionHistoryLimit\":5,\"selector\":{\"matchLabels\":{\"app\":\"rollback-web\"}},\"strategy\":{\"rollingUpdate\":{\"maxSurge\":1,\"maxUnavailable\":0},\"type\":\"RollingUpdate\"},\"template\":{\"metadata\":{\"labels\":{\"app\":\"rollback-web\"}},\"spec\":{\"containers\":[{\"image\":\"nginx:1.28.0-alpine\",\"name\":\"web\",\"ports\":[{\"containerPort\":80}],\"readinessProbe\":{\"failureThreshold\":2,\"httpGet\":{\"path\":\"/rollback-lab-intentional-failure\",\"port\":80},\"periodSeconds\":3,\"timeoutSeconds\":1},\"resources\":{\"limits\":{\"cpu\":\"250m\",\"memory\":\"128Mi\"},\"requests\":{\"cpu\":\"50m\",\"memory\":\"32Mi\"}}}]}}}}\n"
+    },
+    "creationTimestamp": "2026-10-19T15:35:15Z",
+    "generation": 2,
+    "name": "rollback-web",
+    "namespace": "rollback-lab",
+    "resourceVersion": "150151",
+    "uid": "0ac833ca-6313-4f48-bf42-61dae78e49d9"
+  },
+  "spec": {
+    "progressDeadlineSeconds": 60,
+    "replicas": 1,
+    "revisionHistoryLimit": 5,
+    "selector": {
+      "matchLabels": {
+        "app": "rollback-web"
+      }
+    },
+    "strategy": {
+      "rollingUpdate": {
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "type": "RollingUpdate"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "rollback-web"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "image": "nginx:1.28.0-alpine",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "web",
+            "ports": [
+              {
+                "containerPort": 80,
+                "protocol": "TCP"
+              }
+            ],
+            "readinessProbe": {
+              "failureThreshold": 2,
+              "httpGet": {
+                "path": "/rollback-lab-intentional-failure",
+                "port": 80,
+                "scheme": "HTTP"
+              },
+              "periodSeconds": 3,
+              "successThreshold": 1,
+              "timeoutSeconds": 1
+            },
+            "resources": {
+              "limits": {
+                "cpu": "250m",
+                "memory": "128Mi"
+              },
+              "requests": {
+                "cpu": "50m",
+                "memory": "32Mi"
+              }
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "terminationMessagePolicy": "File"
+          }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "terminationGracePeriodSeconds": 30
+      }
+    }
+  },
+  "status": {
+    "availableReplicas": 1,
+    "conditions": [
+      {
+        "lastTransitionTime": "2026-10-19T15:35:22Z",
+        "lastUpdateTime": "2026-10-19T15:35:22Z",
+        "message": "Deployment has minimum availability.",
+        "reason": "MinimumReplicasAvailable",
+        "status": "True",
+        "type": "Available"
+      },
+      {
+        "lastTransitionTime": "2026-10-19T15:45:46Z",
+        "lastUpdateTime": "2026-10-19T15:45:46Z",
+        "message": "ReplicaSet \"rollback-web-6958f6d5cc\" has timed out progressing.",
+        "reason": "ProgressDeadlineExceeded",
+        "status": "False",
+        "type": "Progressing"
+      }
+    ],
+    "observedGeneration": 2,
+    "readyReplicas": 1,
+    "replicas": 2,
+    "terminatingReplicas": 0,
+    "unavailableReplicas": 1,
+    "updatedReplicas": 1
+  }
+}

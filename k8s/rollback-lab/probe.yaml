@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rollback-probe
+  namespace: rollback-lab
+spec:
+  restartPolicy: Never
+  containers:
+    - name: probe
+      image: nginx:1.28.0-alpine
+      command:
+        - /bin/sh
+        - -c
+        - |
+          while true; do
+            started=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+            if wget -q -T 2 -O /tmp/response.html \
+              http://rollback-web/ 2>/tmp/request-error.txt; then
+              if grep -q 'Welcome to nginx!' /tmp/response.html; then
+                echo "$started SUCCESS"
+              else
+                echo "$started CONTENT_MISMATCH"
+              fi
+            else
+              echo "$started REQUEST_FAILED"
+            fi
+            sleep 1
+          done
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi

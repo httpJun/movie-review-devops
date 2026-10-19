@@ -1,0 +1,14 @@
+{
+  "context": "k3d-rancher-lab",
+  "baseline_commit": "169ab02edb02d9712b5f9957a153df55af849ea0",
+  "started_utc": "2026-10-19T15:44:38.093462+00:00",
+  "failure_detected": true,
+  "recovery_verified": true,
+  "bad_commit": "1ba56c256c31962feb47a0caa41a83900c27df47",
+  "failure_detection_seconds": 69.576,
+  "restore_commit": "dd583a67361885d90e5c1bc2f30cc917fff3ac6b",
+  "total_seconds": 80.744,
+  "detection_to_recovery_seconds": 11.169,
+  "finished_utc": "2026-10-19T15:45:58.838769+00:00",
+  "passed": true
+}
