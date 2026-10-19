@@ -34,7 +34,7 @@ spec:
               memory: 128Mi
           readinessProbe:
             httpGet:
-              path: /
+              path: /rollback-lab-intentional-failure
               port: 80
             periodSeconds: 3
             timeoutSeconds: 1
