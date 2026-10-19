@@ -140,3 +140,19 @@ bash scripts/infra/install-monitoring.sh --check
 
 [검증 과정과 결과](docs/postgres-backup-restore.md) ·
 [자동 검증 스크립트](scripts/infra/verify-postgres-restore.py)
+
+## GitOps 배포 실패·자동 롤백 검증
+
+로컬 k3d의 별도 Nginx 앱에서 readiness 설정 오류를 주입하고,
+Python 스크립트로 배포 실패 감지와 Git revert·push를 자동화했습니다.
+Argo CD가 복원된 설정을 반영한 뒤 정상 배포와 HTTP 응답을 확인했습니다.
+
+- 실패 감지 후 정상 복원 확인까지 단일 측정 11.169초
+- 실험 중 관측한 HTTP 요청 80회 모두 성공
+- 최종 Argo CD 상태 Synced / Healthy
+- 기존 정상 Pod를 유지한 상태에서 실패한 신규 배포를 복원
+
+영화 리뷰 앱 전체·EKS 복구나 CI 연동을 검증한 결과는 아닙니다.
+
+[검증 과정과 한계](docs/gitops-rollback.md) ·
+[자동 검증 스크립트](scripts/infra/verify-gitops-rollback.py)
