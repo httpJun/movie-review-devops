@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rollback-web
+  namespace: rollback-lab
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 60
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: rollback-web
+  template:
+    metadata:
+      labels:
+        app: rollback-web
+    spec:
+      containers:
+        - name: web
+          image: nginx:1.28.0-alpine
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            periodSeconds: 3
+            timeoutSeconds: 1
+            failureThreshold: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollback-web
+  namespace: rollback-lab
+spec:
+  selector:
+    app: rollback-web
+  ports:
+    - port: 80
+      targetPort: 80
