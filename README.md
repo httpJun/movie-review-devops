@@ -4,7 +4,7 @@
 
 공동 개발한 [영화 리뷰 분석 애플리케이션](https://github.com/JustJaebbang/capstone)을 배포 대상으로 사용했습니다. 이 저장소에서는 제가 수행한 인프라 구성, CI/CD, 접근 제어, 모니터링 및 복구 실습을 기록합니다. FastAPI·Next.js·PostgreSQL 소스는 이미지 빌드와 배포 재현을 위해 함께 보관합니다.
 
-> **현재 상태 · 2026-10-10:** 계획한 실습과 검증을 완료하고 EKS 및 실습 EC2·EBS를 정리했습니다. 상시 데모 대신 설정 코드·실행 로그·캡처를 제공합니다.
+> **운영 상태:** AWS 실행 리소스는 2026-10-10 정리 여부를 확인했습니다. 이후 로컬 k3d에서 PostgreSQL 복원과 GitOps 배포 실패 복구를 추가 검증했습니다. 상시 데모 대신 설정 코드·측정 결과·캡처를 제공합니다.
 
 [핵심 성과](#핵심-성과) · [아키텍처](#아키텍처) · [장애 대응](#대표-장애-대응) · [재현 방법](#재현-방법) · [상세 문서](#상세-문서)
 
@@ -23,6 +23,8 @@
 |---|---|---|
 | 인프라·배포 | EKS 생성, DB 마이그레이션·앱 Ready, ALB 경유 HTTP 200 | [EKS 기록](k8s/eks-demo/README.md) |
 | CI/CD·인증 | OIDC Role 인증, ECR 이미지 업로드, GitOps digest 갱신·Argo CD 동기화 | [OIDC](docs/github-actions-oidc.md) · [배포 기록](docs/verification.md) |
+| PostgreSQL 복원 · 로컬 | 실제 앱 스키마의 합성 데이터 영화 100건·리뷰 10,000건을 새 DB에 복원, 행 수·체크섬·버전 일치. 복원 명령 **0.15342초** | [백업·복원](docs/postgres-backup-restore.md) |
+| GitOps 롤백 · 로컬 | 별도 Nginx 앱의 오류 배포 감지 후 Git 복원·정상 확인 **11.169초**, 관측 HTTP **80/80 성공** | [자동 롤백](docs/gitops-rollback.md) |
 | Pod 확장 | CPU 부하에 따른 HPA의 backend Pod **1 → 2 → 1** | [HPA 기록](k8s/eks-demo/README.md) |
 | 노드 확장 | CPU requests 부족으로 Pending 발생 후 EKS 노드 **1 → 2 → 1** 자동 확장·축소 | [Autoscaler](docs/cluster-autoscaler.md) |
 | 장애 복구 | 로컬 워커 중지 후 정상 워커에 대체 Pod 생성, HTTP 요청 영향 측정 | [노드 복구](docs/node-recovery.md) |
@@ -31,6 +33,8 @@
 | Rancher·CRD | 개발자 권한 검증, 인증서 Ready 확인 및 잘못된 Issuer 참조 복구 | [Rancher 기록](docs/rancher-crd-rbac.md) · [개발자 배포](docs/team-environment-automation.md) |
 
 **환경 구분:** AWS EKS 실습과 로컬 Docker·k3d 실습은 별도로 수행했습니다. HPA와 노드 자동 확장도 각각 검증했으며, 모든 구성요소를 동시에 실행한 통합 운영 환경을 의미하지 않습니다.
+
+백업 시간은 전체 서비스 복구 시간이 아닙니다. 롤백은 기존 정상 Pod를 유지한 실험이며 영화 리뷰 앱 전체의 무중단 배포를 입증하지 않습니다. 두 시간 모두 단일 실행 측정입니다.
 
 ## 아키텍처
 
@@ -88,7 +92,9 @@ flowchart LR
 
 ## 재현 방법
 
-저장소 루트에서 클러스터 없이 사전 점검할 수 있습니다.
+로컬 실습은 [백업·롤백 재현 안내](docs/local-reproduction.md)에 준비·실행·결과 확인·종료 순서로 정리했습니다. 새로 보완한 준비 절차의 전체 재실행은 미검증입니다. 코드 이해와 수정 연습은 [프로젝트 설명 연습](docs/project-walkthrough.md)을 참고하세요.
+
+AWS 배포는 저장소 루트에서 클러스터 없이 사전 점검할 수 있습니다.
 
 ```bash
 bash scripts/infra/preflight.sh
@@ -104,6 +110,9 @@ bash scripts/infra/install-monitoring.sh --check
 
 | 문서 | 내용 |
 |---|---|
+| [PostgreSQL 백업·복원](docs/postgres-backup-restore.md) | 실제 앱 스키마·합성 데이터 복원과 검증 자동화 |
+| [GitOps 자동 롤백](docs/gitops-rollback.md) | 실패 감지·Git 복원·HTTP 관측과 측정 한계 |
+| [HPA 성능 실험 · 보조 기록](docs/hpa-performance.md) | 자동 확장·요청 분산 관측, 성능 개선 결론은 보류 |
 | [검증 캡처](docs/verification.md) | 배포·접속·운영 실습 증거 |
 | [OIDC 전환](docs/github-actions-oidc.md) | 신뢰 정책, Role 인증 및 CI 실행 결과 |
 | [노드 자동 확장](docs/cluster-autoscaler.md) | 설정, 확장·축소 시각 및 ASG 활동 |
@@ -118,41 +127,9 @@ bash scripts/infra/install-monitoring.sh --check
 ## 검증 범위와 비용 관리
 
 - **확장·복구:** EKS의 HPA와 Cluster Autoscaler는 별도 실험입니다. HPA부터 노드 확장까지의 통합 부하 시험, EKS 앱의 노드 장애 복구·무중단 배포·고가용성은 미검증입니다.
-- **데이터·성능:** DB·모니터링 데이터의 영속화·백업 복구, 실제 트래픽 성능, EKS에서 리뷰 수집부터 LLM 분석까지의 전체 파이프라인은 미검증입니다.
+- **데이터:** 로컬 PostgreSQL의 새 DB 복원은 검증했습니다. EKS DB·모니터링 데이터의 영속화와 재해 복구, 정기 백업·PITR·API 정상화는 미검증입니다.
+- **성능:** 로컬 HPA 실험은 자동 확장과 요청 분산을 확인했지만, 비교 조건의 한계로 성능 개선을 대표 성과로 제시하지 않습니다. 실제 트래픽 성능과 EKS에서 수집부터 LLM 분석까지의 전체 파이프라인은 미검증입니다.
 - **플랫폼:** 팀 간 네트워크 격리, 사용자 정의 CRD·컨트롤러 개발, 인증서 자동 갱신과 외부 알림은 검증하지 않았습니다.
 - **비용:** 필요한 실습 시간에만 실행 리소스를 생성하고 종료 후 삭제합니다. 2026-10-10 EKS 목록이 비어 있고 실습 EC2 2대가 종료됐으며 서울 리전 EBS가 없음을 확인했습니다. 보존한 ECR 이미지에는 저장 비용이 남을 수 있습니다.
 
 종료 점검은 `bash scripts/infra/check-cleanup.sh`로 수행합니다. 조회 범위는 서울 리전의 지정 리소스이며 다른 리전·서비스나 청구액 전체를 확인하는 검사는 아닙니다. Secret 값은 Git에 저장하지 않습니다.
-
-## PostgreSQL 백업·복구 검증
-
-로컬 k3d에서 실제 앱의 Alembic 마이그레이션을 적용한 PostgreSQL DB에
-영화 100건·리뷰 10,000건의 테스트 데이터를 입력하고,
-논리 백업을 새 DB에 복원했습니다.
-
-- 원본과 복원 DB의 행 수·데이터 체크섬·Alembic 버전 일치
-- public 테이블 목록 일치, 연결된 영화가 없는 리뷰 0건
-- 백업 크기 109,402바이트, 자동 검증 실행의 복원 명령 소요 시간 0.15342초
-- 백업·새 DB 복원·데이터 비교를 Python 스크립트로 자동화
-
-소규모 로컬 테스트이며, EKS의 DB 복구·API 정상화·정기 백업은 미검증입니다.
-측정 시간은 전체 서비스 복구 시간이 아닙니다.
-
-[검증 과정과 결과](docs/postgres-backup-restore.md) ·
-[자동 검증 스크립트](scripts/infra/verify-postgres-restore.py)
-
-## GitOps 배포 실패·자동 롤백 검증
-
-로컬 k3d의 별도 Nginx 앱에서 readiness 설정 오류를 주입하고,
-Python 스크립트로 배포 실패 감지와 Git revert·push를 자동화했습니다.
-Argo CD가 복원된 설정을 반영한 뒤 정상 배포와 HTTP 응답을 확인했습니다.
-
-- 실패 감지 후 정상 복원 확인까지 단일 측정 11.169초
-- 실험 중 관측한 HTTP 요청 80회 모두 성공
-- 최종 Argo CD 상태 Synced / Healthy
-- 기존 정상 Pod를 유지한 상태에서 실패한 신규 배포를 복원
-
-영화 리뷰 앱 전체·EKS 복구나 CI 연동을 검증한 결과는 아닙니다.
-
-[검증 과정과 한계](docs/gitops-rollback.md) ·
-[자동 검증 스크립트](scripts/infra/verify-gitops-rollback.py)
