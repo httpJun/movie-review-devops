@@ -64,7 +64,7 @@ maxUnavailable 0 설정으로 기존 정상 Pod가 유지됐다.
 
 ## 실행 방법과 전제
 
-저장소 루트에서 다음 명령을 실행한다.
+[로컬 재현 안내](local-reproduction.md)에서 브랜치·Application·관측 Pod 준비를 먼저 확인한다. 저장소 루트에서 다음 명령을 실행한다.
 
     python3 scripts/infra/verify-gitops-rollback.py
 
@@ -91,7 +91,7 @@ maxUnavailable 0 설정으로 기존 정상 Pod가 유지됐다.
 
 - [측정 결과](evidence/gitops-rollback/result.json)
 - [HTTP 집계](evidence/gitops-rollback/http-summary.json)
-- [HTTP 원본 로그](evidence/gitops-rollback/http-probe.log)
+- HTTP 원본 로그는 로컬 실행 기록 경로의 `http-probe.log`에 보관한다. 현재 저장소에는 집계 JSON만 포함되어 있다.
 - [실패 시 Deployment](evidence/gitops-rollback/failed-deployment.json)
 - [최종 Argo CD 상태](evidence/gitops-rollback/application-after.txt)
 - [최종 Pod 상태](evidence/gitops-rollback/pods-after.txt)

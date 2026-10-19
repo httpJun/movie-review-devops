@@ -73,7 +73,7 @@ kubectl 프로세스 실행, 연결, 백업 전송 및 pg_restore 실행을 포�
 
 ## 자동 검증 스크립트
 
-저장소 루트에서 실행한다.
+DB·스키마·합성 데이터 준비는 [로컬 재현 안내](local-reproduction.md)를 참고한다. 저장소 루트에서 실행한다.
 
 ```bash
 python3 scripts/infra/verify-postgres-restore.py

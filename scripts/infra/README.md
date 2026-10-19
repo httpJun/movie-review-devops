@@ -103,3 +103,13 @@ bash scripts/infra/check-cleanup.sh
 ## 실제 실행 기록
 
 [실제 EKS 재배포 검증 및 캡처](../../docs/redeployment-verification.md)
+
+## 로컬 백업·롤백 검증
+
+AWS 배포와 별개인 로컬 k3d 실습이다. [준비·실행·종료 안내](../../docs/local-reproduction.md)를 먼저 확인한다.
+
+- `seed-backup-lab.sql`: 빈 앱 테이블에 합성 데이터를 입력한다. 기존 영화·리뷰가 있으면 중단한다.
+- `verify-postgres-restore.py`: 기존 원본 DB를 백업하고 새 DB에 복원해 비교한다.
+- `verify-gitops-rollback.py`: 실습 브랜치에 오류·복원 커밋을 push하고 Argo CD 동기화를 검증한다.
+
+두 검증 스크립트는 실제 작업을 실행하므로 코드 확인을 위해 import하지 않는다.
