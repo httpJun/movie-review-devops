@@ -1,0 +1,5 @@
+# Isolated unit tests; no database, GPU/model download, or external API calls.
+pytest==8.4.2
+ruff==0.14.1
+openai==2.30.0
+pydantic==2.12.5

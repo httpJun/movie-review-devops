@@ -79,7 +79,7 @@ cgv_test.log
 # =========================
 .claude/.env
 
-[200~# =========================
+# =========================
 # Node / Next.js
 # =========================
 node_modules/
@@ -98,3 +98,6 @@ yarn-error.log*
 *.tfvars.json
 crash.log
 crash.*.log
+
+.ruff_cache/
+.venv-ci/
