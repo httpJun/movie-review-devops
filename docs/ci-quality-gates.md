@@ -48,11 +48,26 @@ Settings → Branches → Add branch protection rule에서 `main`을 지정한�
 | 검사 | 범위 | 실패 시 조치 |
 | --- | --- | --- |
 | Ruff | app, scripts, alembic, tests의 E9/F63/F7/F82: 문법 및 일부 런타임 오류 | 표시된 코드 수정. 스타일 전체 준수나 타입 안전성을 의미하지 않음 |
-| pytest | 라벨 생성의 순서/누락/빈 응답/잘못된 JSON/API 실패/키 누락, 대표 문구 빈도 | 실패 케이스와 실제 구현 확인. DB/ML/HTTP 통합 테스트는 아직 포함하지 않음 |
+| pytest | 라벨 생성의 순서/누락/빈 응답/잘못된 JSON/API 실패/키 누락, 대표 문구 빈도 | 실패 케이스와 실제 구현 확인. 정책의 신규 탐지·수정 버전 공개·만료 차단도 검증. 외부 DB/실제 수집 통합 테스트는 미포함 |
 | Trivy secret | 저장소 작업 트리 | 실제 유출이면 키 폐기/교체 후 코드에서 제거. 과거 Git 이력 전체 검사는 아님 |
-| Trivy image | backend/frontend 최종 이미지의 OS/라이브러리 HIGH, CRITICAL | report artifact에서 패키지와 수정 버전 확인 후 base image/lockfile 업데이트 |
+| Trivy image | 모든 심각도를 JSON으로 보관하고 HIGH/CRITICAL 정책 평가 | 전체 artifact와 Actions summary에서 차단/유예 내역 확인 |
+| Image smoke | API/프론트엔드 HTTP, Chromium, ML 기본 인코딩 | 런타임 호환성 확인; 실제 사전학습 모델·외부 서비스 전체 회귀 검증은 아님 |
 
-Trivy는 `ignore-unfixed: false`, `exit-code: 1`로 실행한다. 수정 버전이 없는 HIGH/CRITICAL 취약점도 막는다. DB 다운로드/스캐너 오류도 검사 실패이며, `continue-on-error`로 통과시키지 않는다. 현재 의존성에 취약점이 있다면 첫 실행이 실패하는 것이 정상적인 차단 동작이다. 예외가 필요하면 CVE별 근거/담당자/만료일을 별도 검토하며, 이번 변경에는 blanket ignore나 예외를 추가하지 않았다.
+### 취약점 처리 정책 (2026-10-20)
+
+- 수정 버전이 있는 HIGH/CRITICAL: 무조건 차단. 기존 유예 목록에 있어도 차단한다.
+- 수정 버전이 없는 신규 HIGH/CRITICAL: 검토되지 않은 항목이므로 차단한다.
+- 기존 58건: `security/vulnerability-exceptions.json`에 등록된 backend Debian의 패키지·설치 버전·CVE·심각도가 모두 일치할 때만 임시 유예한다.
+- 유예 만료일은 **2026-11-03 (UTC) 당일부터 차단**, 담당자는 저장소 소유자 httpJun이다. 자동 연장은 없다. 한국 시간으로 당일 오전 9시부터 적용된다.
+- 패키지/버전/심각도 변경, 새로운 CVE, 수정 버전 공개 시 새 평가 대상이 된다. frontend로 예외가 전파되지 않는다.
+- LOW/MEDIUM/UNKNOWN도 전체 JSON에 남기되 현재 자동 배포 차단 대상은 아니다.
+
+이는 개인 포트폴리오/데모 범위에서의 14일 한시적 위험 수용이며, 취약점이 수정되었거나 악용 불가능하다는 판단이 아니다. 특히 libxml2의 CRITICAL CVE-2026-6653은 남아 있다. 공개 운영/실제 사용자 데이터 취급 전에는 별도 영향 분석과 보완이 필요하다. 목록과 사유/담당자/만료일을 PR에서 함께 검토한다.
+
+Trivy 자체는 `ignore-unfixed: false`, 모든 심각도, JSON 출력, `exit-code: 0`으로 전체 결과를 생성한다. 바로 다음 **Enforce vulnerability policy** 단계가 위 기준을 적용해 exit 1로 차단한다. 따라서 스캐너의 exit 0이 전체 게이트 통과를 의미하지 않는다. DB 다운로드/스캐너 실행 오류는 그대로 실패하며 `continue-on-error`는 사용하지 않는다.
+
+전체 Trivy JSON은 30일간 artifact로 보관하고, 차단/유예 개수와 유예 CVE를 Actions Summary에 표시한다. `.trivyignore`로 결과를 숨기지 않는다. 각 PR/main 실행에서 DB를 다시 확인하며, 담당자는 주 1회 및 만료 전 main의 수동 CI로 재검토한다. 자동 주기 실행이나 알림을 설정한 것은 아니다. 유예 목록을 갱신할 때는 항목별 근거와 새 만료일을 별도 PR로 남긴다.
+
 
 ## 로컬 검증
 

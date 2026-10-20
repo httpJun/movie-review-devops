@@ -17,6 +17,7 @@ on:
       - "uv.lock"
       - "requirements-ci.txt"
       - "tests/**"
+      - "security/**"
       - "Dockerfile"
       - ".dockerignore"
       - ".gitignore"
@@ -101,23 +102,27 @@ jobs:
         env:
           COMPONENT: ${{ matrix.component }}
         run: bash scripts/ci/smoke-image.sh "$COMPONENT" "movie-review-${COMPONENT}:${GITHUB_SHA}"
-      - name: Block HIGH and CRITICAL vulnerabilities
+      - name: Scan all vulnerabilities (retain unfixed findings)
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: movie-review-${{ matrix.component }}:${{ github.sha }}
           scanners: vuln
-          severity: HIGH,CRITICAL
+          severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
           ignore-unfixed: 'false'
-          exit-code: '1'
-          format: table
-          output: trivy-${{ matrix.component }}.txt
+          exit-code: '0'
+          format: json
+          output: trivy-${{ matrix.component }}.json
+      - name: Enforce vulnerability policy
+        env:
+          COMPONENT: ${{ matrix.component }}
+        run: python3 scripts/ci/vulnerability_gate.py "trivy-${COMPONENT}.json" security/vulnerability-exceptions.json "$COMPONENT"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: trivy-${{ matrix.component }}
-          path: trivy-${{ matrix.component }}.txt
+          path: trivy-${{ matrix.component }}.json
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 30
       - name: Export the scanned image for publishing
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         env:
@@ -236,7 +241,9 @@ jobs:
             Source commit: ${{ github.sha }}
             CI: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-            Ruff, pytest, secret scan and both image scans passed before publication.
+            Ruff, pytest, smoke tests, secret scan and vulnerability policy passed.
+            Review the full Trivy artifacts and temporary debt in the CI summary.
+            A policy pass does not mean the images contain zero vulnerabilities.
             Human action: close and reopen this bot PR to trigger PR checks, then
             review the image digests and merge only after Quality gate passes.
             Check for newer deployment PRs before merging; close superseded ones.
