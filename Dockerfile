@@ -18,9 +18,12 @@ ENV PYTHONPATH=/app
 ENV PLAYWRIGHT_BROWSERS_PATH=/opt/playwright
 
 COPY --from=builder /app/.venv /app/.venv
-# Keep browser and PostgreSQL runtime libraries, without the compiler toolchain.
+# Production collectors use headless Chromium; no Xvfb/display server is needed.
+# Remove its orphan dependencies while retaining Chromium/PostgreSQL runtime libraries.
 RUN apt-get update && apt-get install -y --no-install-recommends libpq5 \
     && playwright install --with-deps chromium \
+    && apt-get purge -y xvfb xserver-common \
+    && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY app ./app
