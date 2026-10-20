@@ -97,6 +97,10 @@ jobs:
           load: true
           push: false
           tags: movie-review-${{ matrix.component }}:${{ github.sha }}
+      - name: Smoke test production image
+        env:
+          COMPONENT: ${{ matrix.component }}
+        run: bash scripts/ci/smoke-image.sh "$COMPONENT" "movie-review-${COMPONENT}:${GITHUB_SHA}"
       - name: Block HIGH and CRITICAL vulnerabilities
         uses: aquasecurity/trivy-action@v0.36.0
         with:
