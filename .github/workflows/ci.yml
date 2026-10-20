@@ -1,10 +1,11 @@
-name: Build and Push to ECR
+name: CI
 
 on:
+  pull_request:
+    branches: [main]
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
       - "app/**"
       - "alembic/**"
@@ -14,71 +15,183 @@ on:
       - "data/**"
       - "pyproject.toml"
       - "uv.lock"
+      - "requirements-ci.txt"
+      - "tests/**"
       - "Dockerfile"
       - ".dockerignore"
+      - ".gitignore"
       - "frontend/**"
       - ".github/workflows/ci.yml"
 
+permissions:
+  contents: read
+
 concurrency:
-  group: movie-review-ci-main
-  cancel-in-progress: false
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  build-and-push:
+  python:
+    name: Python quality
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+      - run: python -m pip install -r requirements-ci.txt
+      - name: Ruff runtime and syntax checks
+        run: ruff check app scripts alembic tests
+      - name: Unit tests (no external services)
+        run: pytest -q --junitxml=test-results.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unit-test-results
+          path: test-results.xml
+          if-no-files-found: warn
+          retention-days: 7
 
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: secret
+          exit-code: '1'
+
+  images:
+    name: Image scan (${{ matrix.component }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - component: backend
+            context: .
+          - component: frontend
+            context: ./frontend
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@v3
+      - name: Build candidate (never push from PR)
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          platforms: linux/amd64
+          load: true
+          push: false
+          tags: movie-review-${{ matrix.component }}:${{ github.sha }}
+      - name: Block HIGH and CRITICAL vulnerabilities
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: movie-review-${{ matrix.component }}:${{ github.sha }}
+          scanners: vuln
+          severity: HIGH,CRITICAL
+          ignore-unfixed: 'false'
+          exit-code: '1'
+          format: table
+          output: trivy-${{ matrix.component }}.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trivy-${{ matrix.component }}
+          path: trivy-${{ matrix.component }}.txt
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Export the scanned image for publishing
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          COMPONENT: ${{ matrix.component }}
+        run: docker save "movie-review-${COMPONENT}:${GITHUB_SHA}" -o "${RUNNER_TEMP}/${COMPONENT}.tar"
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        with:
+          name: image-${{ matrix.component }}
+          path: ${{ runner.temp }}/${{ matrix.component }}.tar
+          retention-days: 1
+          compression-level: 0
+
+  quality-gate:
+    name: Quality gate
+    if: always()
+    needs: [python, secrets, images]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require every check to succeed
+        env:
+          PYTHON_RESULT: ${{ needs.python.result }}
+          SECRET_RESULT: ${{ needs.secrets.result }}
+          IMAGE_RESULT: ${{ needs.images.result }}
+        run: |
+          test "$PYTHON_RESULT" = success
+          test "$SECRET_RESULT" = success
+          test "$IMAGE_RESULT" = success
+
+  publish:
+    name: Publish scanned images and propose deployment
+    needs: quality-gate
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: write
+      pull-requests: write
       id-token: write
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: image-*
+          path: ${{ runner.temp }}/images
+          merge-multiple: true
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::918897411315:role/movie-review-github-actions-ecr
           role-session-name: github-actions-${{ github.run_id }}
           aws-region: ap-northeast-2
-
-      - name: Verify AWS identity
-        run: aws sts get-caller-identity
-
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and push backend
-        id: backend
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          platforms: linux/amd64
-          push: true
-          tags: |
-            ${{ steps.login-ecr.outputs.registry }}/movie-review-backend:latest
-            ${{ steps.login-ecr.outputs.registry }}/movie-review-backend:${{ github.sha }}
-
-      - name: Build and push frontend
-        id: frontend
-        uses: docker/build-push-action@v6
-        with:
-          context: ./frontend
-          platforms: linux/amd64
-          push: true
-          tags: |
-            ${{ steps.login-ecr.outputs.registry }}/movie-review-frontend:latest
-            ${{ steps.login-ecr.outputs.registry }}/movie-review-frontend:${{ github.sha }}
+      - name: Push exactly the scanned images
+        id: push
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          for component in backend frontend; do
+            docker load -i "${RUNNER_TEMP}/images/${component}.tar"
+            image="${ECR_REGISTRY}/movie-review-${component}:${GITHUB_SHA}"
+            docker tag "movie-review-${component}:${GITHUB_SHA}" "$image"
+            docker push "$image"
+            digest=$(aws ecr describe-images --repository-name "movie-review-${component}" \
+              --image-ids "imageTag=${GITHUB_SHA}" --query 'imageDetails[0].imageDigest' --output text)
+            echo "${component}=${digest}" >> "$GITHUB_OUTPUT"
+          done
 
       - name: Update GitOps image digests
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          BACKEND_DIGEST: ${{ steps.backend.outputs.digest }}
-          FRONTEND_DIGEST: ${{ steps.frontend.outputs.digest }}
+          BACKEND_DIGEST: ${{ steps.push.outputs.backend }}
+          FRONTEND_DIGEST: ${{ steps.push.outputs.frontend }}
         run: |
           python3 - <<'PY'
           import json
@@ -104,19 +217,23 @@ jobs:
               print(f"Updated {app}: {digest}")
           PY
 
-      - name: Commit and push GitOps update
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add \
-            k8s/gitops/movie-app/deployment-backend.json \
+      - name: Open deployment PR (human merge required)
+        uses: peter-evans/create-pull-request@v8.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: deploy/images-${{ github.sha }}
+          add-paths: |
+            k8s/gitops/movie-app/deployment-backend.json
             k8s/gitops/movie-app/deployment-frontend.json
+          commit-message: "deploy: scanned images from ${{ github.sha }}"
+          title: "deploy: scanned images from ${{ github.sha }}"
+          body: |
+            Source commit: ${{ github.sha }}
+            CI: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-          if git diff --cached --quiet; then
-            echo "Image digests unchanged."
-            exit 0
-          fi
-
-          git commit -m "Deploy images from ${GITHUB_SHA}"
-          git push origin HEAD:main
+            Ruff, pytest, secret scan and both image scans passed before publication.
+            Human action: close and reopen this bot PR to trigger PR checks, then
+            review the image digests and merge only after Quality gate passes.
+            Check for newer deployment PRs before merging; close superseded ones.
+            Argo CD deploys only after this PR is merged. No auto-merge is enabled.

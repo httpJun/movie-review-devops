@@ -133,3 +133,7 @@ bash scripts/infra/install-monitoring.sh --check
 - **비용:** 필요한 실습 시간에만 실행 리소스를 생성하고 종료 후 삭제합니다. 2026-10-10 EKS 목록이 비어 있고 실습 EC2 2대가 종료됐으며 서울 리전 EBS가 없음을 확인했습니다. 보존한 ECR 이미지에는 저장 비용이 남을 수 있습니다.
 
 종료 점검은 `bash scripts/infra/check-cleanup.sh`로 수행합니다. 조회 범위는 서울 리전의 지정 리소스이며 다른 리전·서비스나 청구액 전체를 확인하는 검사는 아닙니다. Secret 값은 Git에 저장하지 않습니다.
+
+## CI 품질 검증 및 배포 통제
+
+PR에서 Ruff·pytest·Trivy 검사를 실행하고, 통과한 이미지만 ECR에 게시한 뒤 별도 GitOps 배포 PR로 반영합니다. [검사 범위·브랜치 보호 설정·실패 차단 검증](docs/ci-quality-gates.md)을 참고하세요. 보호 설정과 실제 실행 결과는 별도로 확인해야 합니다.
