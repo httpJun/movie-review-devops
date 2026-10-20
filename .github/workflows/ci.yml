@@ -191,8 +191,12 @@ jobs:
             image="${ECR_REGISTRY}/movie-review-${component}:${GITHUB_SHA}"
             docker tag "movie-review-${component}:${GITHUB_SHA}" "$image"
             docker push "$image"
-            digest=$(aws ecr describe-images --repository-name "movie-review-${component}" \
-              --image-ids "imageTag=${GITHUB_SHA}" --query 'imageDetails[0].imageDigest' --output text)
+            digest=$(aws ecr batch-get-image --repository-name "movie-review-${component}" \
+              --image-ids "imageTag=${GITHUB_SHA}" --query 'images[0].imageId.imageDigest' --output text)
+            if [[ ! "$digest" =~ ^sha256:[0-9a-f]{64}$ ]]; then
+              echo "Invalid ECR digest for ${component}: ${digest}" >&2
+              exit 1
+            fi
             echo "${component}=${digest}" >> "$GITHUB_OUTPUT"
           done
 
