@@ -42,7 +42,7 @@
                 }
               }
             ],
-            "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-backend@sha256:edef87b14162622d0bff114a53dbfd5ed1f255d39945f34de692a10881daccc7",
+            "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-backend@sha256:e8ac59627f3dbe70f63ad2ed3be41c610fbc9f1e40d921b6361a62fb453d206a",
             "imagePullPolicy": "IfNotPresent",
             "livenessProbe": {
               "failureThreshold": 3,
