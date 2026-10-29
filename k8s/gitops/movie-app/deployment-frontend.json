@@ -36,7 +36,7 @@
                 "value": "http://backend:8000"
               }
             ],
-            "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-frontend@sha256:617725e7db926b816abb2eb511e2a3592ec7179f89e12d746aa1fdb399ad420e",
+            "image": "918897411315.dkr.ecr.ap-northeast-2.amazonaws.com/movie-review-frontend@sha256:7f9f51f1109ec7e2a6c5f245edc75731b914bb2e04c33a575c9d5e76e4408c02",
             "imagePullPolicy": "IfNotPresent",
             "livenessProbe": {
               "failureThreshold": 3,
