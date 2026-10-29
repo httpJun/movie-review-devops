@@ -53,16 +53,16 @@ Settings → Branches → Add branch protection rule에서 `main`을 지정한�
 | Trivy image | 모든 심각도를 JSON으로 보관하고 HIGH/CRITICAL 정책 평가 | 전체 artifact와 Actions summary에서 차단/유예 내역 확인 |
 | Image smoke | API/프론트엔드 HTTP, Chromium, ML 기본 인코딩 | 런타임 호환성 확인; 실제 사전학습 모델·외부 서비스 전체 회귀 검증은 아님 |
 
-### 취약점 처리 정책 (2026-10-20)
+### 취약점 처리 정책 (2026-10-29 재검토)
 
 - 수정 버전이 있는 HIGH/CRITICAL: 무조건 차단. 기존 유예 목록에 있어도 차단한다.
 - 수정 버전이 없는 신규 HIGH/CRITICAL: 검토되지 않은 항목이므로 차단한다.
 - 기존 58건: `security/vulnerability-exceptions.json`에 등록된 backend Debian의 패키지·설치 버전·CVE·심각도가 모두 일치할 때만 임시 유예한다.
-- 유예 만료일은 **2026-11-03 (UTC) 당일부터 차단**, 담당자는 저장소 소유자 httpJun이다. 자동 연장은 없다. 한국 시간으로 당일 오전 9시부터 적용된다.
+- 유예 만료일은 **2026-11-10 (UTC) 당일부터 차단**, 담당자는 저장소 소유자 httpJun이다. 자동 연장은 없다. 한국 시간으로 당일 오전 9시부터 적용된다.
 - 패키지/버전/심각도 변경, 새로운 CVE, 수정 버전 공개 시 새 평가 대상이 된다. frontend로 예외가 전파되지 않는다.
 - LOW/MEDIUM/UNKNOWN도 전체 JSON에 남기되 현재 자동 배포 차단 대상은 아니다.
 
-이는 개인 포트폴리오/데모 범위에서의 14일 한시적 위험 수용이며, 취약점이 수정되었거나 악용 불가능하다는 판단이 아니다. 특히 libxml2의 CRITICAL CVE-2026-6653은 남아 있다. 공개 운영/실제 사용자 데이터 취급 전에는 별도 영향 분석과 보완이 필요하다. 목록과 사유/담당자/만료일을 PR에서 함께 검토한다.
+이는 개인 포트폴리오/데모 범위에서의 최초 14일 유예에 7일을 추가한 한시적 위험 수용이며, 취약점이 수정되었거나 악용 불가능하다는 판단이 아니다. 특히 libxml2의 CRITICAL CVE-2026-6653은 남아 있다. 공개 운영/실제 사용자 데이터 취급 전에는 별도 영향 분석과 보완이 필요하다. 목록과 사유/담당자/만료일을 PR에서 함께 검토한다.
 
 Trivy 자체는 `ignore-unfixed: false`, 모든 심각도, JSON 출력, `exit-code: 0`으로 전체 결과를 생성한다. 바로 다음 **Enforce vulnerability policy** 단계가 위 기준을 적용해 exit 1로 차단한다. 따라서 스캐너의 exit 0이 전체 게이트 통과를 의미하지 않는다. DB 다운로드/스캐너 실행 오류는 그대로 실패하며 `continue-on-error`는 사용하지 않는다.
 
@@ -89,3 +89,11 @@ CI용 의존성은 외부 API를 mock하는 격리된 단위 테스트에 필요
 5. 정상 소스 PR 병합 후 ECR 게시와 배포 PR 생성을 확인한다. 배포 PR을 닫았다 다시 열어 검사한 후 병합하고 Argo CD/실제 HTTP 응답을 확인한다.
 
 로컬 단위 테스트 성공만으로 ECR 권한, GitHub 보호 규칙, 실제 배포까지 검증되었다고 기록하지 않는다. Actions 실행 링크와 병합 차단 화면, 배포 후 HTTP 검증 결과를 별도로 남긴다.
+
+## 2026-10-29 예외 재검토 및 7일 연장
+
+- 저장소 소유자의 요청으로 기존 58건의 만료일을 2026-11-03에서 2026-11-10으로 연장했다. 새 예외는 추가하지 않았다.
+- 근거: [main CI 40868649327](https://github.com/httpJun/movie-review-devops/actions/runs/40868649327). backend 차단 0/유예 58, frontend 차단 0/유예 0.
+- Debian Security Tracker의 trixie 정보를 대조한 결과, 중복 제외 20개 CVE 모두 open이며 수정 버전이 제공되지 않았다. 데이터: https://security-tracker.debian.org/tracker/data/json (2026-10-29 조회).
+- EKS는 종료된 상태이며, 재가동 또는 공개 운영 전 재검토한다. CRITICAL libxml2를 포함한 잔여 위험은 해결되지 않았다.
+- 수정 버전이 있는 항목, 신규/변경된 항목은 계속 차단한다. 2026-11-10 00:00 UTC(한국 시간 09:00)부터 기존 예외도 차단하며 자동 연장은 없다.
